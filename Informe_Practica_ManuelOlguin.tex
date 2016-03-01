@@ -1,0 +1,184 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%		PLANTILLA LATEX PARA INFORMES
+%%%%			LATEX REPORT TEMPLATE
+%%%%
+%%%%	Autor	: Carlos Gonzalez Cortes
+%%%%	Correo	: carlgonz@ug.uchile.cl
+%%%%	Version	: 1.0
+%%%%
+%%%%	Notas	: Este codigo se entrega tal cual es y sin
+%%%%			  ningun tipo de garantia. Sientase libre de
+%%%%			  modificar y compartir.(acentos omitidos en
+%%%%			  los comentarios por compatibilidad)
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\documentclass[11pt,letterpaper]{article}
+\usepackage[spanish]{babel}
+%\usepackage[ansinew]{inputenc}
+\usepackage[utf8]{inputenc}
+% \usepackage[latin1]{inputenc}
+\usepackage[letterpaper,includeheadfoot, top=0cm, bottom=1.5cm, right=2.0cm, left=2.0cm, headheight=77pt]{geometry}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{amssymb}
+\usepackage{url}
+%\usepackage{pdfpages}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{subfig}
+
+\usepackage{listings} %Codigo
+\lstset{language=Python, tabsize=4,framexleftmargin=5mm,breaklines=true}
+
+% footnote in footer
+\newcommand{\fancyfootnotetext}[2]{%
+  \fancypagestyle{dingens}{%
+    \fancyfoot[LO,RE]{\parbox{12cm}{\footnotemark[#1]\footnotesize #2}}%
+  }%
+  \thispagestyle{dingens}%
+}
+
+\begin{document}
+%\begin{sf}
+% --------------- ---------PORTADA --------------------------------------------
+\newpage
+\pagestyle{fancy}
+\fancyhf{}
+%-------------------- CABECERA ---------------------
+\fancyhead[L]{ \includegraphics[scale=0.3]{img/fcfm_dcc.pdf} }
+%\fancyhead[R]{ \includegraphics[scale=0.4]{img/fcfm.png} }
+%------------------ TÍTULO -----------------------
+\vspace*{6cm}
+\begin{center}
+\Huge  {Informe de Práctica}\\
+\vspace{1cm}
+\small {CC4901 -- Práctica Profesional I}\\
+\end{center}
+%----------------- NOMBRES ------------------------
+\vfill
+\begin{flushright}
+\begin{tabular}{ll}
+Empresa: & NIC Chile Research Labs\\
+Alumno: & Manuel Olguín\\
+Carrera: & Ingeniería Civil en Computación\\
+RUT:& 18.274.982 -- 6\\
+E-Mail: & molguin@dcc.uchile.cl\\
+Tel: & +56 9 7463 6997\\
+& \today\\
+& Santiago, Chile.
+\end{tabular}
+\end{flushright}
+
+% ·············· ENCABEZADO - PIE DE PAGINA ············
+\newpage
+\pagestyle{fancy}
+\fancyhf{}
+
+%Encabezado
+%\fancyhead[L]{\rightmark}
+%\fancyhead[L]{\small \rm \textit{Sección \rightmark}} %Izquierda
+%\fancyhead[R]{\small \rm \textbf{\thepage}} %Derecha
+
+\fancyfoot[L]{\small \rm \textit{Sección \rightmark}} %Izquierda
+\fancyfoot[R]{\small \rm \textbf{\thepage}} %Derecha
+
+%\fancyfoot[L]{\small \rm \textit{Pie de página - Izquierda}} %Izquierda
+%\fancyfoot[R]{\small \rm \textit{Pie de página - Derecha}} %Derecha
+%\fancyfoot[C]{\thepage} %Centro
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+\newpage
+\section{Certificado de la Empresa}
+\newpage
+\section{Observaciones}
+\newpage
+% =============== INDICE ===============
+
+\tableofcontents
+%\listoffigures
+
+% =============== SECCION ===============
+\newpage
+\section{Resumen}
+
+El trabajo se realizó entre Agosto y Octubre del 2015 en NIC Chile Research Labs, el laboratorio de investigación y desarrollo en protocolos de internet de la Facultad de Ciencias Físicas y Matemáticas de la Universidad de Chile. \@ Consistió en
+\begin{enumerate}
+    \item rediseñar e actualizar la API del backend de BeCity, una aplicación Android desarrollada en el laboratorio, para que se adhiriera al modelo REST.
+    \item diseñar e implementar un microservicio de manejo de imágenes para el proyecto SUR.
+\end{enumerate}
+
+BeCity es una aplicación móvil Android orientada a ciclistas, la cual pretende facilitar el tránsito del usuario por la ciudad. Cuenta con un servicio de búsqueda de rutas con ciclovías, y permite grabar los recorridos del usuario, guardando estadísticas de velocidad, distancia recorrida, calorías quemadas, etc. Funciona bajo el paradigna cliente-servidor: existe un servicio central (el backend) que almacena y maneja los datos, y la aplicación Android (el cliente) se comunica con este servicio para actualizar y obtener información. Esta comunicación se realiza mediante una API (Application Programming Interface) usando HTTP (HyperText Transfer Protocol), sobre la cual se realizó el trabajo previamente mencionado.\\
+
+El rediseño de esta API tenía como fin su modernización y adaptación a estándares modernos, en específico el modelo REST (REpresentational State Transfer)\\
+
+SUR (Southern URban Observatory) es una plataforma que pretende centralizar todos los proyectos desarrollados en NICLabs. En este sentido, SUR se plantea como un backend unificado para los distintos servicios, ofreciendo funcionalidades comunes como autentificación de usuarios y manejo de recursos como imágenes, y generando una integración más estrecha entre los servicios.\\
+
+* explicar microservicio *
+\newpage
+\section{Introducción}
+\subsection{Lugar de Trabajo}
+\subsection{Equipo de Trabajo}
+\subsection{Software y Conceptos Importantes}
+* breve introducción *
+\subsubsection{REST - Representational State Transfer}
+
+El modelo REST es una serie de restricciones arquitecturales que, al aplicarse a un servicio web, induce una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
+
+A continuación, se expondrán brevemente las restricciones impuestas por el modelo REST:
+\begin{enumerate}
+    \item \textbf{Modelo Cliente - Servidor} \@ Debe existir una clara separación de responsabilidades mediante una interfaz uniforme. Por ejemplo, el servidor debe encargarse del almacenamiento y procesamiento de los datos, pero no de la representación visual de éstos, y vice-versa en el caso del cliente.
+    \item \textbf{\textit{Statelessness} - Ausencia de Estados} \@ El servidor no debe guardar información del estado del cliente entre solicitudes. El estado es almacenado por el cliente; cada solicitud debe ser independiente y contener toda la información necesaria para realizarse.
+    \item \textbf{Caché} \@ El servidor debe poder guardar solicitudes en caché para poder responder futuras solicitudes de manera más expedita.
+    \item \textbf{Transparencia de Capas} \@ El cliente no debe poder determinar si está conectado directamente al servidor o a un servicio intermedio (proxy, etc).
+    \item \textbf{Uniformidad de la Interfaz} \@ A su vez puede separarse en:
+    \begin{itemize}
+        \item \emph{Separación de recursos y su representación} \@ La representación externa de los recursos (datos) debe ser independiente de como son almacenados por el servidor. A su vez, estas representaciones contienen toda la información necesaria para poder modificar el recurso original.
+        \item \emph{Identificación Uniforme de Recursos} \@ Por ejemplo, mediante URI's (Uniform Resource Identifier).
+        \item \emph{Mensajes Autodescriptivos} \@ Cada mensaje incluye información de cómo procesarlo.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{API - Application Programming Interface}
+\subsubsection{Python}
+\subsubsection{Redis}
+\subsubsection{Docker}
+\subsubsection{BeCity}
+\subsubsection{SUR - Southern Urban Observatory}
+
+\newpage
+\section{Trabajo Realizado}
+\newpage
+\section{Conclusiones}
+
+
+
+
+
+% ============= FIN DE DOCUMENTO ==============
+\end{document}
+
+% % ················ IMAGEN ·················
+% \begin{figure}[ht!]
+% \centering
+% \fbox{\includegraphics[scale=0.6]{img/flujo.png}}
+% \caption{Flujo de caja anual}\label{flujo}
+% \end{figure}
+% %··········································
+
+% % ················ IMAGEN DOBLE ·················
+% \begin{figure}[ht!] \centering
+% \subfloat[Esquemático]{\includegraphics[scale=0.44]{img/seguidor.png}}
+% \subfloat[Simulación]{\includegraphics[scale=0.45]{img/seguidor1.png}}
+% \caption{Simulación como seguidor de voltaje}\label{seguidor}
+% \end{figure}
+% %··········································
