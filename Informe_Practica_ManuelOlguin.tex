@@ -105,7 +105,7 @@ Tel: & +56 9 7463 6997\\
 % =============== INDICE ===============
 
 \tableofcontents
-%\listoffigures
+\listoffigures
 
 % =============== SECCION ===============
 \newpage
@@ -130,9 +130,9 @@ SUR (Southern URban Observatory) es una plataforma que pretende centralizar todo
 \subsection{Equipo de Trabajo}
 \subsection{Software y Conceptos Importantes}
 * breve introducción *
-\subsubsection{REST - Representational State Transfer}
+\subsubsection{REST}
 
-El modelo REST es una serie de restricciones arquitecturales que, al aplicarse a un servicio web, induce una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
+El modelo REST (por sus siglas en inglés, ``Representational State Transfer'') es una serie de restricciones arquitecturales que, al aplicarse a un servicio web, induce una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
 
 A continuación, se expondrán brevemente las restricciones impuestas por el modelo REST:
 \begin{enumerate}
@@ -143,13 +143,48 @@ A continuación, se expondrán brevemente las restricciones impuestas por el mod
     \item \textbf{Uniformidad de la Interfaz} \@ A su vez puede separarse en:
     \begin{itemize}
         \item \emph{Separación de recursos y su representación} \@ La representación externa de los recursos (datos) debe ser independiente de como son almacenados por el servidor. A su vez, estas representaciones contienen toda la información necesaria para poder modificar el recurso original.
-        \item \emph{Identificación Uniforme de Recursos} \@ Por ejemplo, mediante URI's (Uniform Resource Identifier).
+        \item \emph{Identificación Uniforme de Recursos} \@ Por ejemplo, mediante URI's\cite{uri}.
         \item \emph{Mensajes Autodescriptivos} \@ Cada mensaje incluye información de cómo procesarlo.
     \end{itemize}
 \end{enumerate}
 
-\subsubsection{API - Application Programming Interface}
+\subsubsection{API}
+
+Una API (Application Programming Interface), en el contexto de servicios web, es una interfaz de interacción entre los componentes de un modelo servidor-cliente. Específicamente, consiste en un conjunto de puntos de enlace (endpoints) públicos en el servidor, a través de los cuales un cliente puede comunicarse e interactuar con el servicio central.
+
+% explicar rest + http + api?
+
+\subsubsection{PostgreSQL}
+
 \subsubsection{Python}
+
+Python es un lenguaje de programación interpretado, dinámico y de alto nivel, con énfasis en la fácil lectura de su código y su brevedad sintáctica. Es un lenguaje multipropósito, apto para programas de pequeña y gran escala, y con soporte para múltiples paradigmas de programación (orientado a objetos, funcional, imperativo, etc).
+
+En el contexto del trabajo realizado, Python, principalmente en su versión 2.7 (aunque en algunas instancias se ocupó también la versión más nueva del lenguaje, 3.5), fue el lenguaje escogido para el desarrollo de los servicios. Esto, ya que debido a su gran popularidad, cuenta con una enorme cantidad de librerías bien documentadas y mantenidas que facilitaron el desarrollo. Principalmente, se utilizaron las librerías
+\begin{itemize}
+    \item \emph{Flask}\cite{flask}, la cual provee funcionalidades para el desarrollo de servicios web.
+    \item \emph{Restless}\cite{restless}, para implementar el modelo REST.
+    \item \emph{SQLAlchemy}\cite{sqlalchemy}, para interactuar con la base de datos.
+\end{itemize}
+
+\subsubsection{JSON}
+
+JSON (JavaScript Object Notation), es un estándar abierto de codificación de datos para la comunicación entre servidor y cliente, en la cual los datos se codifican en pares atributo-valor en ``cleartext'' (es decir, texto legible por humanos).
+Por ejemplo, el siguiente extracto ilustra una posible codificación de la FCFM en JSON:
+\begin{lstlisting}[language=JSON]
+{
+    "Nombre": "Facultad de Ciencias Fisicas y Matematicas",
+    "Universidad": "Universidad de Chile",
+    "Direccion": {
+        "Calle": "Beauchef",
+        "Numero": 850,
+        "Comuna": "Santiago",
+        "Region": "Metropolitana",
+        "Pais": "CHILE"
+    }
+}
+\end{lstlisting}
+
 \subsubsection{Redis}
 \subsubsection{Docker}
 \subsubsection{BeCity}
@@ -159,9 +194,16 @@ A continuación, se expondrán brevemente las restricciones impuestas por el mod
 \section{Trabajo Realizado}
 \newpage
 \section{Conclusiones}
+\newpage
+\begin{thebibliography}{5}
+    \bibitem{uri} \emph{URI - Uniform Resource Identifier}: cadena de caracteres utilizada para identificar recursos específicos, siguiendo un esquema definido.\\ \url{https://en.wikipedia.org/wiki/Uniform_Resource_Identifier}
 
+	\bibitem{flask} \emph{Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions.}\\ \url{http://flask.pocoo.org/}
 
+    \bibitem{restless} \emph{Restless - A lightweight REST miniframework for Python.}\\ \url{https://restless.readthedocs.org/en/latest/}
 
+    \bibitem{sqlalchemy}\emph{SQLAlchemy - The Python SQL Toolkit and Object Relational Mapper}\\ \url{http://www.sqlalchemy.org/}
+\end{thebibliography}
 
 
 % ============= FIN DE DOCUMENTO ==============
@@ -172,7 +214,9 @@ A continuación, se expondrán brevemente las restricciones impuestas por el mod
 % \centering
 % \fbox{\includegraphics[scale=0.6]{img/flujo.png}}
 % \caption{Flujo de caja anual}\label{flujo}
-% \end{figure}
+% \end{figure}\\begin{enumerate}
+    \item a
+\end{enumerate}
 % %··········································
 
 % % ················ IMAGEN DOBLE ·················
