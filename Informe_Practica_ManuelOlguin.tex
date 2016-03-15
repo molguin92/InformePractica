@@ -35,7 +35,61 @@
 \usepackage{subfig}
 
 \usepackage{listings} %Codigo
-\lstset{language=Python, tabsize=4,framexleftmargin=5mm,breaklines=true}
+\lstset{language=Python, tabsize=4,breaklines=true}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.8, 0.8, 0.8}
+
+\lstdefinestyle{mystyle}{
+    %backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=t,
+    keepspaces=true,
+    numbers=left,
+    numbersep=8pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4
+}
+
+\usepackage{xcolor}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
+\lstset{style=mystyle}
+
 
 % footnote in footer
 \newcommand{\fancyfootnotetext}[2]{%
@@ -127,9 +181,23 @@ SUR (Southern URban Observatory) es una plataforma que pretende centralizar todo
 \newpage
 \section{Introducción}
 \subsection{Lugar de Trabajo}
+
+NIC Chile Research Labs (en adelante, NICLabs)\cite{niclabs}, es el laboratorio de redes de la Facultad de Ciencias Físicas y Matemáticas de la Universidad de Chile. Fundado en 2007, sus principales áreas de investigación y desarrollo son protocolos de internet y seguridad informática.
+
+El trabajo detallado en el presente informe se desarrolló entre octubre y diciembre del año 2015, de manera presencial en las instalaciones del laboratorio ubicadas en Av. Blanco Encalada 1975, Santiago, Chile.
+
 \subsection{Equipo de Trabajo}
+
+%Arreglar!%
+
+NICLabs cuenta tanto con desarrolladores e investigadores de tiempo completo, así como con estudiantes de pre- y postgrado. En específico, el trabajo se desarrolló en una sala compartida con otras 6 personas de distintas especialidades (diseñadores, ingenieros y estudiantes de pregrado).
+
+En cuanto a los proyectos descritos en el presente informe, ambos se encontraban bajo la dirección de Felipe Lalanne\cite{lalanne}, investigador y desarrollador experimentado. Cabe destacar que si bien existe un equipo de trabajo formalmente conformado para BeCity, éste sólo maneja y actualiza la versión actual del software, y por ende el practicante no se unió directamente a éste, ya que su trabajo consideraba el rediseño completo del backend.
+Por otro lado, no existe grupo de trabajo para SUR, y el practicante trabajó directamente con el supervisor.
+
 \subsection{Software y Conceptos Importantes}
-* breve introducción *
+En términos generales, ambos proyectos se desarrollaron en el lenguaje de programación Python\cite{python}, utilizando además JetBrains Pycharm 5 Professional Edition\cite{pycharm} como IDE (\emph{Integrated Development Environment} - Entorno de Desarrollo Integrado) principal.
+
 \subsubsection{REST}
 
 El modelo REST (por sus siglas en inglés, ``Representational State Transfer'') es una serie de restricciones arquitecturales que, al aplicarse a un servicio web, induce una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
@@ -144,7 +212,7 @@ A continuación, se expondrán brevemente las restricciones impuestas por el mod
     \begin{itemize}
         \item \emph{Separación de recursos y su representación} \@ La representación externa de los recursos (datos) debe ser independiente de como son almacenados por el servidor. A su vez, estas representaciones contienen toda la información necesaria para poder modificar el recurso original.
         \item \emph{Identificación Uniforme de Recursos} \@ Por ejemplo, mediante URI's\cite{uri}.
-        \item \emph{Mensajes Autodescriptivos} \@ Cada mensaje incluye información de cómo procesarlo.
+        \item \emph{Mensajes Autodescriptivos} \@ Cada mensaje incluye información de cómo procesarse.
     \end{itemize}
 \end{enumerate}
 
@@ -156,16 +224,18 @@ Una API (Application Programming Interface), en el contexto de servicios web, es
 
 \subsubsection{PostgreSQL}
 
+PostgreSQL\cite{postgres} es una de las principales implementaciones modernas del lenguaje SQL (Structured Query Language - Lenguaje Estructurado de Consultas) para bases de datos. Es un sistema de base de datos relacional ampliamente utilizado en la industria, y en específico, en BeCity se ocupa para el almacenamiento y consulta de los datos proporcionados por los usuarios.
+
 \subsubsection{Python}
 
 Python es un lenguaje de programación interpretado, dinámico y de alto nivel, con énfasis en la fácil lectura de su código y su brevedad sintáctica. Es un lenguaje multipropósito, apto para programas de pequeña y gran escala, y con soporte para múltiples paradigmas de programación (orientado a objetos, funcional, imperativo, etc).
 
-En el contexto del trabajo realizado, Python, principalmente en su versión 2.7 (aunque en algunas instancias se ocupó también la versión más nueva del lenguaje, 3.5), fue el lenguaje escogido para el desarrollo de los servicios. Esto, ya que debido a su gran popularidad, cuenta con una enorme cantidad de librerías bien documentadas y mantenidas que facilitaron el desarrollo. Principalmente, se utilizaron las librerías
-\begin{itemize}
-    \item \emph{Flask}\cite{flask}, la cual provee funcionalidades para el desarrollo de servicios web.
-    \item \emph{Restless}\cite{restless}, para implementar el modelo REST.
-    \item \emph{SQLAlchemy}\cite{sqlalchemy}, para interactuar con la base de datos.
-\end{itemize}
+En el contexto del trabajo realizado, Python, principalmente en su versión 2.7 (aunque en algunas instancias se ocupó también la versión más nueva del lenguaje, 3.5), fue el lenguaje escogido para el desarrollo de los servicios. Esto, ya que debido a su popularidad, cuenta con una gran cantidad de librerías bien documentadas y mantenidas que facilitaron el desarrollo. %Por ejemplo, entre las librerías utilizadas se encuentran:
+%\begin{itemize}
+%    \item \emph{Flask}\cite{flask}, la cual provee funcionalidades para el desarrollo de servicios web.
+%    \item \emph{Restless}\cite{restless}, para implementar el modelo REST.
+%    \item \emph{SQLAlchemy}\cite{sqlalchemy}, para interactuar con la base de datos.
+%\end{itemize}
 
 \subsubsection{JSON}
 
@@ -186,16 +256,78 @@ Por ejemplo, el siguiente extracto ilustra una posible codificación de la FCFM 
 \end{lstlisting}
 
 \subsubsection{Redis}
-\subsubsection{Docker}
+
+
+
+%\subsubsection{Docker}
 \subsubsection{BeCity}
+
+BeCity es una aplicación para smartphones con el sistema operativo Android, la cual tiene como fin la recolección de datos de ciclistas (por ejemplo, recorridos populares).
+
 \subsubsection{SUR - Southern Urban Observatory}
+
+\subsection{Situación Previa}
+\subsubsection{BeCity}
+
+En agosto del 2015, BeCity como aplicación ya se encontraba en funcionamiento, siendo distribuída a través de la tienda de aplicaciones de Google, la ``Play Store'', y con su backend montado en el servidor de NICLabs. Sin embargo, si bien contaba con una API completa para la comunicación entre clientes y backend, ésta no seguía el estándar REST, y se había decidido reconstruirla desde cero siguiendo éste estándar, para asegurar su futura escalabilidad y estabilidad.
+
+\subsubsection{SUR}
+
+Cuando el practicamente comenzó su trabajo en NICLabs, SUR como proyecto todavía no existía, por lo que todo el trabajo se desarrolló desde cero.
+
+\subsection{Descripción General del Trabajo}
+
+\subsubsection{BeCity}
+
+El practicante diseñó e implementó parte de la nueva API, siguiendo las restricciones del modelo REST para servicios web. El trabajo se realizó por módulos de funcionalidad, siguiendo dos etapas por cada módulo:
+\begin{enumerate}
+    \item \emph{Diseño y Documentación} \\ En esta etapa, el practicante estudió la API existente del módulo escogido para entender el funcionamiento interno de éste, y los métodos que presentaba su interfaz. Luego, se diseñó y documentó la nueva versión del módulo, con especial énfasis en la nueva interfaz.
+    \item \emph{Implementación y Testeo} \\ Luego de diseñado y documentado el módulo, se procedió a la implementación de las funcionalidades en código. Se utilizó el proceso de desarrollo ``Test Driven Development'', es decir, primero se escribían tests para funcionalidades deseadas, y luego se implementaban éstas.
+\end{enumerate}
+
+\subsubsection{SUR}
+
+El trabajo realizado en SUR consistió en el desarrollo de un servicio de manejo de imágenes centralizado para todos los proyectos de la plataforma. El servicio debía básicamente almacenar y servir imágenes proporcionadas por los proyectos, por ejemplo para avatares de usuario. Se requería especial énfasis en la modularidad del servicio, de tal manera de que pudiese interactuar con cualquier otro proyecto que se adhiriera a la plataforma SUR en el futuro.
+
+El trabajo consistió de dos etapas:
+\begin{enumerate}
+    \item \emph{Diseño del Servicio}\\ Para comenzar, se determinaron los requerimientos del servicio; las funcionalidades deseadas y la manera de interactuar con éste.
+    \item \emph{Implementación}\\ Ya establecidos los requerimientos, se implementó el sistema deseado.
+\end{enumerate}
 
 \newpage
 \section{Trabajo Realizado}
+
+\subsection{BeCity}
+\subsection{SUR}
+
+Como se he mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - esto con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en todos los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permition por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.
+\\
+Bajo esta lógica fue que al practicante se le solicitó la implementación del servicio central de imágenes, el cual permitiese compartir de manera transparente y eficiente recursos de imágenes (por ejemplo, avatares de usuario) entre los proyectos.
+
+\subsubsection{Especificaciones}
+
+El servicio en cuestión debía seguir una serie de especificaciones que aseguraban su eficiencia, escalabilidad y su compatibilidad con los demás servicios de la plataforma.
+
+\begin{enumerate}
+    \item \emph{Independencia:} \@ La implementación del servicio de imágenes debía ser independiente y agnóstica de la implementación del resto de los servicios. Es decir, si bien podía exister interdependencia entre el servicio de imágenes, y (por ejemplo) el servicio de autentificación, ésta no podía depender de la implementación de cada uno. Esto para asegurar que en el futuro, los servicios pudiesen actualizarse o cambiarse completamente sin perturbar el resto de los servicios en la plataforma.
+    \item \emph{Adherencia al modelo REST}
+\end{enumerate}
+
 \newpage
 \section{Conclusiones}
 \newpage
 \begin{thebibliography}{5}
+    \bibitem{niclabs} \emph{NIC Chile Research Labs} - \url{http://niclabs.cl}
+
+    \bibitem{lalanne} \emph{Felipe Lalanne} - \url{https://github.com/pipex}
+
+    \bibitem{postgres} \emph{PostgreSQL - ``The world's most advanced open source database.''}\\ \url{http://www.postgresql.org/}
+
+    \bibitem{python} \emph{The Python Programming Language} - \url{https://www.python.org/}
+
+    \bibitem{pycharm} \emph{JetBrains Pycharm} - \url{https://www.jetbrains.com/pycharm/}
+
     \bibitem{uri} \emph{URI - Uniform Resource Identifier}: cadena de caracteres utilizada para identificar recursos específicos, siguiendo un esquema definido.\\ \url{https://en.wikipedia.org/wiki/Uniform_Resource_Identifier}
 
 	\bibitem{flask} \emph{Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions.}\\ \url{http://flask.pocoo.org/}
