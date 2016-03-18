@@ -301,18 +301,42 @@ El trabajo consistió de dos etapas:
 \subsection{BeCity}
 \subsection{SUR}
 
-Como se he mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - esto con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en todos los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permition por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.
+Como se ha mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - esto con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en todos los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permition por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.
 \\
 Bajo esta lógica fue que al practicante se le solicitó la implementación del servicio central de imágenes, el cual permitiese compartir de manera transparente y eficiente recursos de imágenes (por ejemplo, avatares de usuario) entre los proyectos.
 
 \subsubsection{Especificaciones}
 
-El servicio en cuestión debía seguir una serie de especificaciones que aseguraban su eficiencia, escalabilidad y su compatibilidad con los demás servicios de la plataforma.
+El servicio en cuestión debía seguir una serie de especificaciones generales que aseguraban su eficiencia, escalabilidad y su compatibilidad con los demás servicios de la plataforma.
 
 \begin{enumerate}
     \item \emph{Independencia:} \@ La implementación del servicio de imágenes debía ser independiente y agnóstica de la implementación del resto de los servicios. Es decir, si bien podía exister interdependencia entre el servicio de imágenes, y (por ejemplo) el servicio de autentificación, ésta no podía depender de la implementación de cada uno. Esto para asegurar que en el futuro, los servicios pudiesen actualizarse o cambiarse completamente sin perturbar el resto de los servicios en la plataforma.
-    \item \emph{Adherencia al modelo REST}
+    \item \emph{Adherencia al modelo REST} \@
+    \item \emph{Simplicidad} \@ libre de base de datos, código breve, etc
+    \item \emph{Instántaniedad}
 \end{enumerate}
+
+Además, se establecieron una serie de requerimientos funcionales de los servicios que debía proveer el sistema:
+\begin{enumerate}
+    \item Almacenamiento de imágenes. Por simplicidad, sólo se debía aceptar imágenes en el formato \emph{Portable Network Graphics}, \textbf{.png}.
+    \item Descarga de imágenes del servidor, en tamaños y resoluciones no necesariamente iguales a las originales.
+    \item Actualización de imágenes almacenadas.
+    \item Eliminacion de imágenes almacenadas.
+\end{enumerate}
+
+\subsubsection{Diseño}
+
+En concordancia con las especificaciones y requerimientos anteriores, se llegó al diseño arquitectural detallado en esta sección.
+
+El lenguaje escogido para la implementación fue nuevamente Python 2.7, principalmente por su amplio repertorio de librerías para desarrollo web, además de su simplicidad y elegancia sintáctica. Adicionalmente, es el lenguaje en el que están escritos todos los demás servicios de SUR, asegurando así una coherencia arquitectural interna de la plataforma.
+
+Entre las librerías del lenguaje utilizadas, podemos destacar:
+\begin{itemize}
+    \item Flask\cite{flask}, la cual proporciona un framework básico para el desarrollo de aplicaciones web en Python. Por ejemplo, simplifica la ejecución de una aplicación Python como un servicio web asíncrono, y provee abstracciones para la implementación de endpoints (URL's) para interactuar con la aplicación.
+    \item Pillow\cite{pillow}, librería de manejo de imágenes. Provee métodos de alteración de imágenes (transformaciones de tamaño, formato, etc).
+
+\end{itemize}
+
 
 \newpage
 \section{Conclusiones}
@@ -335,6 +359,8 @@ El servicio en cuestión debía seguir una serie de especificaciones que asegura
     \bibitem{restless} \emph{Restless - A lightweight REST miniframework for Python.}\\ \url{https://restless.readthedocs.org/en/latest/}
 
     \bibitem{sqlalchemy}\emph{SQLAlchemy - The Python SQL Toolkit and Object Relational Mapper}\\ \url{http://www.sqlalchemy.org/}
+
+    \bibitem{pillow}\emph{PILLOW - Python Imaging Library fork}\\ \url{https://pillow.readthedocs.org/en/3.1.x/}
 \end{thebibliography}
 
 
