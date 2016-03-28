@@ -177,7 +177,7 @@ El rediseño de esta API tenía como fin su modernización y adaptación a está
 
 SUR (Southern URban Observatory) es una plataforma que pretende centralizar todos los proyectos desarrollados en NICLabs. En este sentido, SUR se plantea como un backend unificado para los distintos servicios, ofreciendo funcionalidades comunes como autentificación de usuarios y manejo de recursos como imágenes, y generando una integración más estrecha entre los servicios.\\
 
-* explicar microservicio *
+El trabajo realizado en SUR consistió en el diseño y posterior implementación de un pequeño servidor de imágenes, capaz de administrar recursos gráficos de manera eficiente, escalable y simple. Dicho servicio se encuentra actualmente estable y funcionando en la plataforma SUR.
 \newpage
 \section{Introducción}
 \subsection{Lugar de Trabajo}
@@ -193,7 +193,7 @@ El trabajo detallado en el presente informe se desarrolló entre octubre y dicie
 NICLabs cuenta tanto con desarrolladores e investigadores de tiempo completo, así como con estudiantes de pre- y postgrado. En específico, el trabajo se desarrolló en una sala compartida con otras 6 personas de distintas especialidades (diseñadores, ingenieros y estudiantes de pregrado).
 
 En cuanto a los proyectos descritos en el presente informe, ambos se encontraban bajo la dirección de Felipe Lalanne\cite{lalanne}, investigador y desarrollador experimentado. Cabe destacar que si bien existe un equipo de trabajo formalmente conformado para BeCity, éste sólo maneja y actualiza la versión actual del software, y por ende el practicante no se unió directamente a éste, ya que su trabajo consideraba el rediseño completo del backend.
-Por otro lado, no existe grupo de trabajo para SUR, y el practicante trabajó directamente con el supervisor.
+Por otro lado, no existe grupo de trabajo para SUR, y el practicante trabajó directamente bajo la tutela del supervisor.
 
 \subsection{Software y Conceptos Importantes}
 En términos generales, ambos proyectos se desarrollaron en el lenguaje de programación Python\cite{python}, utilizando además JetBrains Pycharm 5 Professional Edition\cite{pycharm} como IDE (\emph{Integrated Development Environment} - Entorno de Desarrollo Integrado) principal.
@@ -218,7 +218,7 @@ A continuación, se expondrán brevemente las restricciones impuestas por el mod
 
 \subsubsection{API}
 
-Una API (Application Programming Interface), en el contexto de servicios web, es una interfaz de interacción entre los componentes de un modelo servidor-cliente. Específicamente, consiste en un conjunto de puntos de enlace (endpoints) públicos en el servidor, a través de los cuales un cliente puede comunicarse e interactuar con el servicio central.
+Una API (Application Programming Interface), en el contexto de servicios web, es una interfaz de interacción entre los componentes de un modelo servidor-cliente. Específicamente, consiste en un conjunto de puntos de enlace (endpoints) públicos en el servidor, a través de los cuales un cliente puede comunicarse e interactuar con el servicio central, utilizando verbos estándar de HTTP (\texttt{GET}, \texttt{PUT}, \texttt{POST} y \texttt{DELETE}).
 
 % explicar rest + http + api?
 
@@ -230,12 +230,7 @@ PostgreSQL\cite{postgres} es una de las principales implementaciones modernas de
 
 Python es un lenguaje de programación interpretado, dinámico y de alto nivel, con énfasis en la fácil lectura de su código y su brevedad sintáctica. Es un lenguaje multipropósito, apto para programas de pequeña y gran escala, y con soporte para múltiples paradigmas de programación (orientado a objetos, funcional, imperativo, etc).
 
-En el contexto del trabajo realizado, Python, principalmente en su versión 2.7 (aunque en algunas instancias se ocupó también la versión más nueva del lenguaje, 3.5), fue el lenguaje escogido para el desarrollo de los servicios. Esto, ya que debido a su popularidad, cuenta con una gran cantidad de librerías bien documentadas y mantenidas que facilitaron el desarrollo. %Por ejemplo, entre las librerías utilizadas se encuentran:
-%\begin{itemize}
-%    \item \emph{Flask}\cite{flask}, la cual provee funcionalidades para el desarrollo de servicios web.
-%    \item \emph{Restless}\cite{restless}, para implementar el modelo REST.
-%    \item \emph{SQLAlchemy}\cite{sqlalchemy}, para interactuar con la base de datos.
-%\end{itemize}
+En el contexto del trabajo realizado, Python, principalmente en su versión 2.7 (aunque en algunas instancias se ocupó también la versión más nueva del lenguaje, 3.5), fue el lenguaje escogido para el desarrollo de los servicios. Esto, ya que debido a su popularidad, cuenta con una gran cantidad de librerías bien documentadas y mantenidas que facilitaron el desarrollo.
 
 \subsubsection{JSON}
 
@@ -257,14 +252,16 @@ Por ejemplo, el siguiente extracto ilustra una posible codificación de la FCFM 
 
 \subsubsection{Redis}
 
-
+Redis puede describirse como un ``almacén de estructuras de datos en disco'', y se utiliza comúnmente como base de datos y transmisor de mensajes; además, en conjunto con la librería \emph{RQWorker}[cite here] de Python, se puede utilizar como una cola de ejecución de tareas. Éste fue el uso que se le dió en el servidor de imágenes, para ejecutar ciertas tareas de tiempo de ejecución más largo de manera diferida.
 
 %\subsubsection{Docker}
 \subsubsection{BeCity}
 
-BeCity es una aplicación para smartphones con el sistema operativo Android, la cual tiene como fin la recolección de datos de ciclistas (por ejemplo, recorridos populares).
+BeCity es una aplicación para smartphones con el sistema operativo Android, la cual tiene como fin la recolección de datos de ciclistas (por ejemplo, recorridos populares en una ciudad o comuna). Además, ayuda a los usuarios a transitar de manera segura por la ciudad, ofreciendo rutas con ciclovías e información atingente.
 
 \subsubsection{SUR - Southern Urban Observatory}
+
+SUR es pretende ser un servicio de uso interno de INRIA Chile y NICLabs; una plataforma centralizada para todos los proyectos de ambos laboratorios. Pretende unificar de ésta manera muchos servicios que se encuentran replicados en los distintos proyectos (por ejemplo, manejo de usuarios) bajo una misma platforma, intengrando así de manera mucho más eficiente distintos proyectos y servicios otorgados por los laboratorios.
 
 \subsection{Situación Previa}
 \subsubsection{BeCity}
@@ -311,9 +308,9 @@ El servicio en cuestión debía seguir una serie de especificaciones generales q
 
 \begin{enumerate}
     \item \emph{Independencia:} \@ La implementación del servicio de imágenes debía ser independiente y agnóstica de la implementación del resto de los servicios. Es decir, si bien podía exister interdependencia entre el servicio de imágenes, y (por ejemplo) el servicio de autentificación, ésta no podía depender de la implementación de cada uno. Esto para asegurar que en el futuro, los servicios pudiesen actualizarse o cambiarse completamente sin perturbar el resto de los servicios en la plataforma.
-    \item \emph{Adherencia al modelo REST} \@
-    \item \emph{Simplicidad} \@ libre de base de datos, código breve, etc
-    \item \emph{Instántaniedad}
+    \item \emph{Adherencia al modelo REST} \@ El servicio debía basarse en el paradigma cliente-servidor, y seguir las especificaciones del modelo REST; comunicación mediante verbos HTTP, no almacenar estados, etc.
+    \item \emph{Simplicidad} \@ El código debía ser simple y conciso, y no agregar demasiada complejidad al sistema.
+    \item \emph{Instántaniedad} \@ Finalmente, la respuesta del servicio a solicitudes por parte de clientes debiese ser expedita, y no causar esperas prolongadas.
 \end{enumerate}
 
 Además, se establecieron una serie de requerimientos funcionales de los servicios que debía proveer el sistema:
@@ -324,19 +321,28 @@ Además, se establecieron una serie de requerimientos funcionales de los servici
     \item Eliminacion de imágenes almacenadas.
 \end{enumerate}
 
-\subsubsection{Diseño}
+\subsubsection{Diseño Arquitectural}
 
 En concordancia con las especificaciones y requerimientos anteriores, se llegó al diseño arquitectural detallado en esta sección.
 
 El lenguaje escogido para la implementación fue nuevamente Python 2.7, principalmente por su amplio repertorio de librerías para desarrollo web, además de su simplicidad y elegancia sintáctica. Adicionalmente, es el lenguaje en el que están escritos todos los demás servicios de SUR, asegurando así una coherencia arquitectural interna de la plataforma.
 
-Entre las librerías del lenguaje utilizadas, podemos destacar:
+Entre las librerías del lenguaje que fueron utilizadas, podemos destacar:
 \begin{itemize}
     \item Flask\cite{flask}, la cual proporciona un framework básico para el desarrollo de aplicaciones web en Python. Por ejemplo, simplifica la ejecución de una aplicación Python como un servicio web asíncrono, y provee abstracciones para la implementación de endpoints (URL's) para interactuar con la aplicación.
     \item Pillow\cite{pillow}, librería de manejo de imágenes. Provee métodos de alteración de imágenes (transformaciones de tamaño, formato, etc).
-
 \end{itemize}
 
+Por otro lado, se descartó utilizar una base de datos para el servicio, ya que toda la información de las imágenes se puede manejar a través de \emph{metadatos} y almacenarse en el sistema de archivos. Agregar un sistema de bases de datos aumentaría la complejidad del sistema de manera innecesaria.\\
+
+Finalmente, para poder asegurar la rapidez del servicio, se decidió realizar ciertas solicitudes de manera diferida -- esto es, no se ejecutan inmediatamente, sino que quedan en una cola de solicitudes y eventualmente se resuelven. Esto se implementó para solicitudes por parte de clientes que no requieren una respuesta inmediata del servidor y que además son intensas en términos de tiempo de ejecución (por ejemplo, la carga de una nueva imagen al servicio, ya que ésta operación requiere además un procesamiento posterior). Esto se implementó mediante el uso de un servidor Redis en conjunto con el servicio de imágenes, el cual almacena y ejecuta las operaciones en la cola.
+
+
+\subsubsection{Implementación}
+
+La implementación del código se llevó a cabo siguiendo una estrategia agile y test-driven.
+
+\paragraph{olo}
 
 \newpage
 \section{Conclusiones}
