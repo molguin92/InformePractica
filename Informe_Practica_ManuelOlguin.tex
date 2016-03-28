@@ -337,7 +337,6 @@ Por otro lado, se descartó utilizar una base de datos para el servicio, ya que 
 
 Finalmente, para poder asegurar la rapidez del servicio, se decidió realizar ciertas solicitudes de manera diferida -- esto es, no se ejecutan inmediatamente, sino que quedan en una cola de solicitudes y eventualmente se resuelven. Esto se implementó para solicitudes por parte de clientes que no requieren una respuesta inmediata del servidor y que además son intensas en términos de tiempo de ejecución (por ejemplo, la carga de una nueva imagen al servicio, ya que ésta operación requiere además un procesamiento posterior). Esto se implementó mediante el uso de un servidor Redis en conjunto con el servicio de imágenes, el cual almacena y ejecuta las operaciones en la cola.
 
-
 \subsubsection{Implementación}
 
 La implementación del código se llevó a cabo siguiendo una estrategia agile y test-driven.
