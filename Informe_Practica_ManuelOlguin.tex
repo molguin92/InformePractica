@@ -51,7 +51,7 @@
     basicstyle=\footnotesize,
     breakatwhitespace=false,
     breaklines=true,
-    captionpos=t,
+    captionpos=b,
     keepspaces=true,
     numbers=left,
     numbersep=8pt,
@@ -167,7 +167,7 @@ Tel: & +56 9 7463 6997\\
 
 El trabajo se realizó entre Agosto y Octubre del 2015 en NIC Chile Research Labs, el laboratorio de investigación y desarrollo en protocolos de internet de la Facultad de Ciencias Físicas y Matemáticas de la Universidad de Chile. \@ Consistió en
 \begin{enumerate}
-    \item rediseñar e actualizar la API del backend de BeCity, una aplicación Android desarrollada en el laboratorio, para que se adhiriera al modelo REST.
+    \item rediseñar e actualizar parte de la API del backend de BeCity, una aplicación Android desarrollada en el laboratorio, para que se adhiriera al modelo REST.
     \item diseñar e implementar un microservicio de manejo de imágenes para el proyecto SUR.
 \end{enumerate}
 
@@ -175,7 +175,7 @@ BeCity es una aplicación móvil Android orientada a ciclistas, la cual pretende
 
 El rediseño de esta API tenía como fin su modernización y adaptación a estándares modernos, en específico el modelo REST (REpresentational State Transfer)\\
 
-SUR (Southern URban Observatory) es una plataforma que pretende centralizar todos los proyectos desarrollados en NICLabs. En este sentido, SUR se plantea como un backend unificado para los distintos servicios, ofreciendo funcionalidades comunes como autentificación de usuarios y manejo de recursos como imágenes, y generando una integración más estrecha entre los servicios.\\
+SUR (Southern URban observatory) es una plataforma que pretende centralizar todos los proyectos desarrollados en NICLabs. En este sentido, SUR se plantea como un backend unificado para los distintos servicios, ofreciendo funcionalidades comunes como autentificación de usuarios y manejo de recursos como imágenes, y generando una integración más estrecha entre los servicios.\\
 
 El trabajo realizado en SUR consistió en el diseño y posterior implementación de un pequeño servidor de imágenes, capaz de administrar recursos gráficos de manera eficiente, escalable y simple. Dicho servicio se encuentra actualmente estable y funcionando en la plataforma SUR.
 \newpage
@@ -192,15 +192,15 @@ El trabajo detallado en el presente informe se desarrolló entre octubre y dicie
 
 NICLabs cuenta tanto con desarrolladores e investigadores de tiempo completo, así como con estudiantes de pre- y postgrado. En específico, el trabajo se desarrolló en una sala compartida con otras 6 personas de distintas especialidades (diseñadores, ingenieros y estudiantes de pregrado).
 
-En cuanto a los proyectos descritos en el presente informe, ambos se encontraban bajo la dirección de Felipe Lalanne\cite{lalanne}, investigador y desarrollador experimentado. Cabe destacar que si bien existe un equipo de trabajo formalmente conformado para BeCity, éste sólo maneja y actualiza la versión actual del software, y por ende el practicante no se unió directamente a éste, ya que su trabajo consideraba el rediseño completo del backend.
+En cuanto a los proyectos descritos en el presente informe, ambos se desarrollaron bajo la dirección de Felipe Lalanne\cite{lalanne}, investigador y desarrollador experimentado del laboratorio. Cabe destacar que si bien existe un equipo de trabajo formalmente conformado para BeCity, éste sólo maneja y actualiza la versión actual del software, y por ende el practicante no se unió directamente a éste, ya que su trabajo consideraba el rediseño completo del backend.
 Por otro lado, no existe grupo de trabajo para SUR, y el practicante trabajó directamente bajo la tutela del supervisor.
-
+\newpage
 \subsection{Software y Conceptos Importantes}
 En términos generales, ambos proyectos se desarrollaron en el lenguaje de programación Python\cite{python}, utilizando además JetBrains Pycharm 5 Professional Edition\cite{pycharm} como IDE (\emph{Integrated Development Environment} - Entorno de Desarrollo Integrado) principal.
 
 \subsubsection{REST}
 
-El modelo REST (por sus siglas en inglés, ``Representational State Transfer'') es una serie de restricciones arquitecturales que, al aplicarse a un servicio web, induce una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
+El modelo REST (por sus siglas en inglés, ``Representational State Transfer'') es una serie de restricciones arquitecturales que, aplicadas a un servicio web, inducen una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
 
 A continuación, se expondrán brevemente las restricciones impuestas por el modelo REST:
 \begin{enumerate}
@@ -218,7 +218,7 @@ A continuación, se expondrán brevemente las restricciones impuestas por el mod
 
 \subsubsection{API}
 
-Una API (Application Programming Interface), en el contexto de servicios web, es una interfaz de interacción entre los componentes de un modelo servidor-cliente. Específicamente, consiste en un conjunto de puntos de enlace (endpoints) públicos en el servidor, a través de los cuales un cliente puede comunicarse e interactuar con el servicio central, utilizando verbos estándar de HTTP (\texttt{GET}, \texttt{PUT}, \texttt{POST} y \texttt{DELETE}).
+Una API (Application Programming Interface), en el contexto de servicios web, es una interfaz de interacción entre los componentes de un modelo servidor-cliente. Específicamente en el caso de una API RESTful, consiste en un conjunto de puntos de enlace (o, cómo se les referirá en el presente informe, \emph{``vistas''}) públicos en el servidor, a través de los cuales un cliente puede comunicarse e interactuar con el servicio central, utilizando verbos estándar de HTTP (\texttt{GET}, \texttt{PUT}, \texttt{POST} y \texttt{DELETE}).
 
 % explicar rest + http + api?
 
@@ -266,20 +266,20 @@ SUR es pretende ser un servicio de uso interno de INRIA Chile y NICLabs; una pla
 \subsection{Situación Previa}
 \subsubsection{BeCity}
 
-En agosto del 2015, BeCity como aplicación ya se encontraba en funcionamiento, siendo distribuída a través de la tienda de aplicaciones de Google, la ``Play Store'', y con su backend montado en el servidor de NICLabs. Sin embargo, si bien contaba con una API completa para la comunicación entre clientes y backend, ésta no seguía el estándar REST, y se había decidido reconstruirla desde cero siguiendo éste estándar, para asegurar su futura escalabilidad y estabilidad.
+En agosto del 2015, BeCity como aplicación ya se encontraba en funcionamiento, siendo distribuída a través de la tienda de aplicaciones de Google, la ``Play Store'', y con su backend montado en el servidor de NICLabs. Sin embargo, si bien contaba con una API completa para la comunicación entre clientes y backend, ésta no seguía el estándar REST para servicios web, principalmente en lo que se refiere a la uniformidad de la interfaz y la transparencia de capas, además de no seguir el estándar HTTP (e.g. todas las solicitudes ocupaban el verbo GET independiente de si solicitaban o no un recurso del servidor). Dado estas condiciones, se había decidido reconstruirla desde cero siguiendo rigurosamente el modelo REST, para asegurar su futura escalabilidad y estabilidad.
 
 \subsubsection{SUR}
 
 Cuando el practicamente comenzó su trabajo en NICLabs, SUR como proyecto todavía no existía, por lo que todo el trabajo se desarrolló desde cero.
-
+\pagebreak
 \subsection{Descripción General del Trabajo}
 
 \subsubsection{BeCity}
 
-El practicante diseñó e implementó parte de la nueva API, siguiendo las restricciones del modelo REST para servicios web. El trabajo se realizó por módulos de funcionalidad, siguiendo dos etapas por cada módulo:
+El practicante diseñó e implementó parte de la nueva API, en específico el módulo de manejo de usuarios, siguiendo las restricciones del modelo REST para servicios web. El trabajo realizado se puede dividir en dos etapas:
 \begin{enumerate}
     \item \emph{Diseño y Documentación} \\ En esta etapa, el practicante estudió la API existente del módulo escogido para entender el funcionamiento interno de éste, y los métodos que presentaba su interfaz. Luego, se diseñó y documentó la nueva versión del módulo, con especial énfasis en la nueva interfaz.
-    \item \emph{Implementación y Testeo} \\ Luego de diseñado y documentado el módulo, se procedió a la implementación de las funcionalidades en código. Se utilizó el proceso de desarrollo ``Test Driven Development'', es decir, primero se escribían tests para funcionalidades deseadas, y luego se implementaban éstas.
+    \item \emph{Implementación y Testeo} \\ Luego de diseñado y documentado el módulo, se procedió a la implementación de las funcionalidades en código. Se utilizó el proceso de desarrollo ``Test Driven Development'', es decir, primero se escribían tests para funcionalidades deseadas, y luego se implementaban.
 \end{enumerate}
 
 \subsubsection{SUR}
@@ -296,9 +296,36 @@ El trabajo consistió de dos etapas:
 \section{Trabajo Realizado}
 
 \subsection{BeCity}
+
+BeCity tiene como facilitar el tránsito del ciclista por la ciudad, a la vez que recopila información y estadísticas útiles proporcionadas por los mismos usuarios. Por lo tanto, el manejo de usuarios de una manera eficiente es fundamental para el funcionamiento del servicio, y por ende éste fue el primer módulo de funcionalidad en ser rediseñado para la nueva versión del backend.
+
+\subsubsection{Análisis de implementación existente}
+
+El primer paso en el rediseño del módulo de usuarios del backend de BeCity, fue el estudio y análisis de la implementación anterior. Esto con el fin de identificar funcionalidades claves que debían mantenerse o mejorarse en la nueva iteración del sistema.\\
+Esta etapa se desarrolló al mismo tiempo que el practicante investigó de manera más profunda sobre el modelo REST y aprendió sobre el uso de las herramientas disponibles en Python para el desarrollo de sistemas de ésta índole.
+
+\paragraph{Almacenamiento de la información de los usuarios}
+
+\subsubsection{Diseño de nueva implementación}
+
+A partir de análisis anterior, el practicante pudo elaborar un nuevo diseño para el backend, completamente en línea con los requerimientos del modelo REST. Este diseño se detalla a continuación, junto con justificaciones de las deciciones tomadas.
+
+\paragraph{Almacenamiento de la información de los usuarios}
+
+Se decidió continuar utilizando PostgreSQL para el almacenamiento de datos, por las ventajas que presenta para el almacenamiento de la información que maneja BeCity. La información manejada por el sistema es inherentemente relacional, puesto que se trata de datos de usuarios y estadísticas que se relacionan mutuamente.\\
+
+En términos del modelo de la base de datos, la información de los usuarios se subdividió en tres tablas:
+\begin{enumerate}
+    \item Tabla User: Esta tabla almacena los datos fundamentales para la autentificación del usuario: su email, nombre de usuario y contraseña, esta última almacenada como un hash SHA256. Además, contiene relaciones con las dos otras tablas.
+    \item Tabla UserDetails: Contiene los detalles no escenciales (desde el punto de vista de la autenficación) del usuario, como por ejemplo su nombre real y fecha de nacimiento.
+    \item Tabla UserStats: Esta es una tabla especial que agrupa llaves foráneas a otra tabla, Sample. Cada entrada en esta última corresponde a una estadística almacenada (Sample por ejemplo almacena el último valor agregado, el máximo, el promedio, etc), por lo que cada llave foránea almacenada en UserStats corresponde a una estadística en Sample.
+\end{enumerate}
+
+Se determinó ésta subdivisión de la información con el fin de modularizar elementos puntuales - de ésta manera, por ejemplo, es posible modificar cómo se almacenan las estadísticas de cada usuario sin afectar su información de inicio de sesión.
+
 \subsection{SUR}
 
-Como se ha mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - esto con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en todos los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permition por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.
+Como se ha mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - esto con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en todos los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permitiedo por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.
 \\
 Bajo esta lógica fue que al practicante se le solicitó la implementación del servicio central de imágenes, el cual permitiese compartir de manera transparente y eficiente recursos de imágenes (por ejemplo, avatares de usuario) entre los proyectos.
 
@@ -317,10 +344,9 @@ Además, se establecieron una serie de requerimientos funcionales de los servici
 \begin{enumerate}
     \item Almacenamiento de imágenes. Por simplicidad, sólo se debía aceptar imágenes en el formato \emph{Portable Network Graphics}, \textbf{.png}.
     \item Descarga de imágenes del servidor, en tamaños y resoluciones no necesariamente iguales a las originales.
-    \item Actualización de imágenes almacenadas.
     \item Eliminacion de imágenes almacenadas.
 \end{enumerate}
-
+\newpage
 \subsubsection{Diseño Arquitectural}
 
 En concordancia con las especificaciones y requerimientos anteriores, se llegó al diseño arquitectural detallado en esta sección.
@@ -335,13 +361,120 @@ Entre las librerías del lenguaje que fueron utilizadas, podemos destacar:
 
 Por otro lado, se descartó utilizar una base de datos para el servicio, ya que toda la información de las imágenes se puede manejar a través de \emph{metadatos} y almacenarse en el sistema de archivos. Agregar un sistema de bases de datos aumentaría la complejidad del sistema de manera innecesaria.\\
 
-Finalmente, para poder asegurar la rapidez del servicio, se decidió realizar ciertas solicitudes de manera diferida -- esto es, no se ejecutan inmediatamente, sino que quedan en una cola de solicitudes y eventualmente se resuelven. Esto se implementó para solicitudes por parte de clientes que no requieren una respuesta inmediata del servidor y que además son intensas en términos de tiempo de ejecución (por ejemplo, la carga de una nueva imagen al servicio, ya que ésta operación requiere además un procesamiento posterior). Esto se implementó mediante el uso de un servidor Redis en conjunto con el servicio de imágenes, el cual almacena y ejecuta las operaciones en la cola.
-
+Finalmente, para poder asegurar la rapidez del servicio, se decidió realizar ciertas solicitudes de manera diferida -- esto es, no se ejecutan inmediatamente, sino que quedan en una cola de solicitudes y eventualmente se resuelven. Esto se implementó para solicitudes por parte de clientes que no requieren una respuesta inmediata del servidor y que además son intensas en términos de tiempo de ejecución (por ejemplo, la carga de una nueva imagen al servicio, ya que ésta operación requiere además un procesamiento posterior). Se efectuó mediante el uso de un servidor Redis en conjunto con el servicio de imágenes, el cual almacena y ejecuta las operaciones en la cola.
+\newpage
 \subsubsection{Implementación}
 
-La implementación del código se llevó a cabo siguiendo una estrategia agile y test-driven.
+La implementación del código se llevó a cabo siguiendo una estrategia iterativa basada en tests, implementando funcionalidades básicas y asegurándose de su correcto funcionamiento mediante tests antes de pasar a funcionalidades más complejas.
 
-\paragraph{olo}
+\paragraph{1. Carga de imágenes al servidor}
+
+Ésta fue la primera funcionalidad en implementarse en el servidor, dada que puede considerarse una de las dos funcionalidades fundamentales del servicio (la otra sería la descarga de imágenes).\\
+
+Funciona de la siguiente manera: el servidor expone públicamente una vista (en este caso, ``/v1/images'') que acepta solicitudes HTTP con el verbo POST. Esta solicitud debe incluir los siguientes HEADERS:
+\begin{verbatim}
+    Content-Type: multipart/form-data
+    Content-MD5: <checksum MD5 del archivo>
+\end{verbatim}
+Además, debe incluir el archivo a subir en formato binario en el cuerpo de la solicitud. \\
+
+Al recibir la solicitud, el servidor primero ejecuta pruebas para verificar la existencia y validez de los datos proporcionados. En esta etapa el proceso puede arrojar tres variantes del mismo error HTTP ``400 Bad Request'', el cual se utiliza para notificar al cliente de que su solicitud no cumple con el formato requerido. En este caso, se lanza el error en caso de ausencia del archivo a cargar, o en caso de que la solicitud no incluya un HEADER con el hash MD5 de la imagen o que éste esté incorrecto.\\
+Verificada la validez de la solicitud, el servidor pasa a almacenar y procesar la imagen (si la imagen ya existe en el sistema de archivos, el servidor simplemente retorna un mensaje HTTP ``201 Created''). En esta etapa también se verifica que el archivo cargado sea efectivamente una imagen, y el servidor retorna nuevamente un ``400 Bad Request'' de no ser así.\\
+
+El procesamiento de las imágenes se hace de manera diferida - al terminar las verificaciones mencionadas previamente, el servidor guarda la imagen en disco y agrega un procedimiento a la cola de procesamiento del servidor Redis (además de retornar ``201 Created'' junto con el hash de la imagen al cliente). La rutina diferida de procesamiento ejecutada por el servidor Redis es la siguiente:
+
+\begin{lstlisting}
+def process_image(filename):
+    """
+    Deferred image handling routine.
+    Generates a set of images of various resolutions from an original image.
+    :param filename: ID of the original image.
+    :rtype: None
+    """
+    try:
+        o_img = Image.open(UPLOAD_FOLDER + filename + '/original.png', 'r')
+        o_img.save(UPLOAD_FOLDER + filename + '/original.png', format='png')
+        resolutions = app.config['STD_RESOLUTIONS']
+
+        for resolution in resolutions:
+            n_img = o_img.copy()
+            n_img.thumbnail(resolution, Image.ANTIALIAS)
+            n_img.save('{0}{1}/{2}.png'.format(UPLOAD_FOLDER, filename, resolution[0], resolution[1]), format='png')
+            n_img.close()
+
+        o_img.close()
+    except IOError:
+        shutil.rmtree(UPLOAD_FOLDER + filename)
+\end{lstlisting}
+
+Para evitar manejar los nombres de las imágenes (por ejemplo, por consideraciones de seguridad), éstas se identifican mediante su hash MD5: al recibir una imagen nueva, el servidor crea un directorio en la carpeta de imágenes cuyo nombre es el hash de la imagen, y luego almacena la imagen recibida bajo el nombre ``original.png'' dentro de dicho directorio. Luego, la rutina diferida ``process\_image()'' se encarga de crear múltiples resoluciones de la misma imagen para su rápido acceso en el futuro, las cuales se almacenan bajo el mismo directorio mencionado anteriormente.\\
+
+Finalmente, una imagen con hash MD5 \texttt{CB5DED429F491D8337FC58006468CF35} cargada correctamente al servidor quedaría almacenada de la siguiente manera:
+\begin{verbatim}
+UPLOAD_FOLDER/
+    CB5DED429F491D8337FC58006468CF35/
+        original.png
+        48.png
+        128.png
+        256.png
+        ...
+\end{verbatim}
+
+Donde los archivos \texttt{48.png}, \texttt{128.png}, etc., corresponden a resoluciones específicas precalculadas para su rápido acceso en el futuro.
+
+\paragraph{2. Descarga de imágenes}
+
+La descarga de imágenes fue la segunda funcionalidad en implementarse, y funciona como se detalla a continuación.
+
+Para descargar una imagen, el cliente debe conocer su ID (la cual corresponde al hash MD5 de la imagen). El servidor a su vez cuenta con una vista ``/v1/images/\textless image\_id\textgreater''; la notación \emph{\textless image\_id\textgreater} denota que esta parte del URL es variable - en específico, el cliente debe reemplazar \emph{\textless image\_id\textgreater} por la ID de la imagen que se solicita. Esta vista acepta los métodos GET y DELETE de HTTP (el verbo correspondiente a la solicitud de descarga es, evidentemente, el verbo GET), además de una serie de parámetros HTTP en el URL:
+\begin{enumerate}
+    \item tamaño precalculado: El cliente puede solicitar un tamaño precalculado de la imagen usando el parámetro \emph{``thumbnail=\textless thumb\_size\textgreater''} (de no existir, se creará).
+    \item a escala: Utilizando el parámetro \emph{``scale=\textless scale\textgreater''}, se puede solicitar la imagen a cierta escala respecto al original.
+    \item transformada: Finalmente, el cliente puede solicitar la transformación de la imagen mediante el uso de los parámetros \emph{``width=\textless w\textgreater''} y \emph{``height=\textless h\textgreater''} para especificar directamente el ancho y la altura de la imagen deseados, respectivamente.
+\end{enumerate}
+
+Por ejemplo, un cliente que desee obtener la imagen \texttt{CB5DED429F491D8337FC58006468CF35} transformada a \texttt{1280x720} (sin mantener la relación de aspecto), debería efectuar la siguiente solicitud:
+\begin{verbatim}
+GET /v1/images/CB5DED429F491D8337FC58006468CF35?width=1280&height=720
+\end{verbatim}
+
+Internamente, las solicitudes son manejadas por el servidor de la siguiente manera:
+Primero, se verifica la existencia de la imagen, y de no existir se retorna un código de error ``404 Not Found'' al cliente.
+Verificada ya la existencia de la imagen solicitada, se procede a servir la imagen de acuerdo a los parámetros solicitados por el cliente (si la solicitud no incluye parámetros, se retorna directamente la imagen original). De especial interés son aquellas solicitudes con el parámetro ``thumbnail'', ya que éstas son solicitudes para resoluciones populares y estándar de la imagen. Tienen el efecto de que, de no existir el tamaño solicitado, este es creado y almacenado por el servidor, de tal manera que futuras solicitudes para dicho tamaño sean más expeditas.\\
+
+\begin{lstlisting}[title=Extracto de código encargado de manejar solicitudes de tamaños precalculados.]
+# Thumbnail requests are done first, because they are faster
+# System now checks if there is a precomputed size stored and sends that instead.
+try:
+    thumb = int(request.args.get('thumbnail', 0))
+except ValueError:
+    raise BadRequest400(error="Width, Height and Thumbnail must be Integers, Scale must be Float")
+except TypeError:
+    raise BadRequest400(error="Width, Height and Thumbnail must be Integers, Scale must be Float")
+
+filename = UPLOAD_FOLDER + image_id + '/' + str(thumb) + '.png'
+
+if thumb != 0 and os.path.exists(filename):  # if it exists, send it
+    img = Image.open(filename)
+    try:
+        return send_image(img)
+    except IOError:
+        app.logger.error('Error when trying to send image ' + image_id)
+        raise IOError
+
+elif thumb != 0:  # if it doesn't, create and then send it
+    img = img.copy()
+    img.thumbnail((thumb, thumb), Image.ANTIALIAS)
+    img.save(filename)
+
+    try:
+        return send_image(img)
+    except IOError:
+        app.logger.error('Error when trying to send image ' + image_id)
+        raise IOError
+\end{lstlisting}
+
+Finalmente, se procesan las solicitudes con los parámetros de escala, ancho y alto, ya que estos requieren procesamiento en el lugar de la imagen, y demoran más.
 
 \newpage
 \section{Conclusiones}
