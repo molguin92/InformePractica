@@ -171,11 +171,11 @@ El trabajo se realizó entre Agosto y Octubre del 2015 en NIC Chile Research Lab
     \item diseñar e implementar un microservicio de manejo de imágenes para el proyecto SUR.
 \end{enumerate}
 
-BeCity es una aplicación móvil Android orientada a ciclistas, la cual pretende facilitar el tránsito del usuario por la ciudad. Cuenta con un servicio de búsqueda de rutas con ciclovías, y permite grabar los recorridos del usuario, guardando estadísticas de velocidad, distancia recorrida, calorías quemadas, etc. Funciona bajo el paradigna cliente-servidor: existe un servicio central (el backend) que almacena y maneja los datos, y la aplicación Android (el cliente) se comunica con este servicio para actualizar y obtener información. Esta comunicación se realiza mediante una API (Application Programming Interface) usando HTTP (HyperText Transfer Protocol), sobre la cual se realizó el trabajo previamente mencionado.\\
+BeCity es una aplicación móvil Android orientada a ciclistas, la cual pretende facilitar el tránsito del usuario por la ciudad. Cuenta con un servicio de búsqueda de rutas con ciclovías, y permite grabar los recorridos del usuario, guardando estadísticas de velocidad, distancia recorrida, calorías quemadas y otros datos relevantes. Funciona bajo el paradigna cliente-servidor: existe un servicio central (el backend) que almacena y maneja los datos, y la aplicación Android (el cliente) se comunica con este servicio para actualizar y obtener información. Esta comunicación se realiza mediante una API (Application Programming Interface) usando HTTP (HyperText Transfer Protocol), sobre la cual se realizó el trabajo previamente mencionado.\\
 
 El rediseño de esta API tenía como fin su modernización y adaptación a estándares modernos, en específico el modelo REST (REpresentational State Transfer)\\
 
-SUR (Southern URban observatory) es una plataforma que pretende centralizar todos los proyectos desarrollados en NICLabs. En este sentido, SUR se plantea como un backend unificado para los distintos servicios, ofreciendo funcionalidades comunes como autentificación de usuarios y manejo de recursos como imágenes, y generando una integración más estrecha entre los servicios.\\
+SUR (Southern URban observatory) es una plataforma que pretende centralizar todos los proyectos desarrollados en NIC Chile Research Labs. En este sentido, SUR se plantea como un backend unificado para los distintos servicios, ofreciendo funcionalidades comunes como autentificación de usuarios y manejo de recursos como imágenes, y generando una integración más estrecha entre los servicios.\\
 
 El trabajo realizado en SUR consistió en el diseño y posterior implementación de un pequeño servidor de imágenes, capaz de administrar recursos gráficos de manera eficiente, escalable y simple. Dicho servicio se encuentra actualmente estable y funcionando en la plataforma SUR.
 \newpage
@@ -228,7 +228,7 @@ PostgreSQL\cite{postgres} es una de las principales implementaciones modernas de
 
 \subsubsection{Python}
 
-Python es un lenguaje de programación interpretado, dinámico y de alto nivel, con énfasis en la fácil lectura de su código y su brevedad sintáctica. Es un lenguaje multipropósito, apto para programas de pequeña y gran escala, y con soporte para múltiples paradigmas de programación (orientado a objetos, funcional, imperativo, etc).
+Python es un lenguaje de programación interpretado, dinámico y de alto nivel, con énfasis en la fácil lectura de su código y su brevedad sintáctica. Es un lenguaje multipropósito, apto para programas de pequeña y gran escala, y con soporte para múltiples paradigmas de programación (orientado a objetos, funcional, imperativo y demases).
 
 En el contexto del trabajo realizado, Python, principalmente en su versión 2.7 (aunque en algunas instancias se ocupó también la versión más nueva del lenguaje, 3.5), fue el lenguaje escogido para el desarrollo de los servicios. Esto, ya que debido a su popularidad, cuenta con una gran cantidad de librerías bien documentadas y mantenidas que facilitaron el desarrollo.
 
@@ -297,7 +297,7 @@ El trabajo consistió de dos etapas:
 
 \subsection{BeCity}
 
-BeCity tiene como facilitar el tránsito del ciclista por la ciudad, a la vez que recopila información y estadísticas útiles proporcionadas por los mismos usuarios. Por lo tanto, el manejo de usuarios de una manera eficiente es fundamental para el funcionamiento del servicio, y por ende éste fue el primer módulo de funcionalidad en ser rediseñado para la nueva versión del backend.
+BeCity tiene como fin el facilitar el tránsito del ciclista por la ciudad, a la vez que recopila información y estadísticas útiles proporcionadas por los mismos usuarios. Por lo tanto, el manejo de usuarios de una manera eficiente es fundamental para el funcionamiento del servicio, y por consiguiente éste fue el primer módulo de funcionalidad en ser rediseñado para la nueva versión del backend.
 
 \subsubsection{Análisis de implementación existente}
 
@@ -316,12 +316,12 @@ Se decidió continuar utilizando PostgreSQL para el almacenamiento de datos, por
 
 En términos del modelo de la base de datos, la información de los usuarios se subdividió en tres tablas:
 \begin{enumerate}
-    \item Tabla User: Esta tabla almacena los datos fundamentales para la autentificación del usuario: su email, nombre de usuario y contraseña, esta última almacenada como un hash SHA256. Además, contiene relaciones con las dos otras tablas.
-    \item Tabla UserDetails: Contiene los detalles no escenciales (desde el punto de vista de la autenficación) del usuario, como por ejemplo su nombre real y fecha de nacimiento.
-    \item Tabla UserStats: Esta es una tabla especial que agrupa llaves foráneas a otra tabla, Sample. Cada entrada en esta última corresponde a una estadística almacenada (Sample por ejemplo almacena el último valor agregado, el máximo, el promedio, etc), por lo que cada llave foránea almacenada en UserStats corresponde a una estadística en Sample.
+    \item Tabla \emph{users}: Esta tabla almacena los datos fundamentales para la autentificación del usuario: su email, nombre de usuario y contraseña, esta última almacenada como un hash SHA256. Además, contiene relaciones con las dos otras tablas.
+    \item Tabla \emph{user\_details}: Contiene los detalles no escenciales (desde el punto de vista de la autenficación) del usuario, como por ejemplo su nombre real y fecha de nacimiento.
+    \item Tabla \emph{user\_stats}: Esta es una tabla especial que agrupa llaves foráneas a otra tabla, \emph{samples}. Cada entrada en esta última corresponde a una estadística almacenada (\emph{samples} por ejemplo almacena el último valor agregado, el máximo, el promedio, etc), por lo que cada llave foránea almacenada en \emph{user\_stats} corresponde a una entrada en \emph{samples}.
 \end{enumerate}
 
-Se determinó ésta subdivisión de la información con el fin de modularizar elementos individuales - de ésta manera, por ejemplo, es posible modificar cómo se almacenan las estadísticas de cada usuario sin afectar su información de inicio de sesión.
+Se determinó ésta subdivisión de la información con el fin de modularizar elementos individuales - de ésta manera, por ejemplo, es posible modificar cómo se almacenan las estadísticas de cada usuario sin afectar su información de inicio de sesión. Además, la abstracción de las estadísticas en muestras almacenadas en una tabla aparte, hacen que en el futuro agregar nuevas métricas al sistema sea simple y directo - basta con agregar una nueva llave foránea a \emph{samples} en \emph{user\_stats}.
 
 \paragraph{API\\\\}
 
@@ -335,21 +335,342 @@ La interacción entre clientes y servidor obedece al paradigma \emph{CRUD} (Crea
     \end{itemize}
     \item \texttt{/api/v1/users/\textless id\textgreater} -- Donde \textless id\textgreater corresponde a una ID de usuario sobre el cual operar. Permite:
     \begin{itemize}
-        \item GET: \emph{Read}, pero a diferencia del método mencionado anteriormente permite el acceso a los detalles de un usuario en específico, y es accesible por administradores y el mismo usuario.
+        \item GET: \emph{Read}, pero a diferencia del método mencionado anteriormente permite el acceso a los detalles de un usuario en específico, y es accesible por administradores y el usuario mismo.
         \item PUT: \emph{Update}, permite la actualización de los datos de un usuario. Disponible para administradores y el usuario mismo.
         \item DELETE: \emph{Delete}, para eliminar un usuario por completo. Sólo accesible por administradores.
     \end{itemize}
     \item \texttt{/api/v1/users/stats/\textless id\textgreater} -- Permite acceder a las estadísticas de un usuario específico:
     \begin{itemize}
-        \item GET: Actualiza las estadísticas del usuario.
-        \item PUT: Retorna el detalle de las estadísticas.
+        \item PUT: Actualiza las estadísticas del usuario.
+        \item GET: Retorna el detalle de las estadísticas.
     \end{itemize}
 \end{enumerate}
 
+Se determinó además que todo intercambio de información entre servidor y cliente (y viceversa), debiese hacerse a través de mensajes en formato JSON. Esto ya que dicho formato permite mantener la estructura lógica y las relaciones internas de los datos al pasarlos a una representación textual, y además agrega menos \emph{overhead} que otros lenguajes de \emph{markup}, como por ejemplo XML.\\
+
+Además, para evitar ciertos problemas de seguridad que existen al retornar listas de objetos JSON directamente en los mensajes, se dictaminó el encapsulamiento de todos los mensajes que originan desde el servidor en un ``sobre'' JSON adicional:
+
+\begin{lstlisting}[language=json, title=Ejemplo de ``sobre'' JSON.]
+{
+    'ok': True,
+    'result': <resultado de la operacion>
+}
+\end{lstlisting}
+
 \subsubsection{Implementación}
 
+Como se mencionó anteriormente, la implementación se llevó a cabo utilizando Python 2.7, en parte por su amplio repertorio de librerías. Entre las librerías utilizadas, podemos destacar:
+\begin{itemize}
+    \item Flask\cite{flask}, la cual proporciona un framework básico para el desarrollo de aplicaciones web en Python. Por ejemplo, simplifica la ejecución de una aplicación Python como un servicio web asíncrono, y provee abstracciones para la implementación de endpoints (URL's) para interactuar con la aplicación.
+    \item SQLAlchemy\cite{sqlalchemy} (junto con su extensión Flask-SQLAlchemy), para la interacción con la base de datos PostgreSQL. Provee abstracciones para la fácil definición de tablas y sus relaciones a través de clases en Python.
+    \item Restless\cite{restless}, librería que proporciona una capa de abstracción para la creación de endpoints de servicios web como clases de Python.
+\end{itemize}
 
+\paragraph{Modelo Base de Datos\\\\}
 
+El modelo de la base de datos se implementó utilizando las abstracciones de SQLAlchemy, definiendo clases de Python para cada una de las tablas antes mencionadas. Éstas cuentan con constructores que se encargan de inicializar las entradas con información por defecto, y con métodos para modificar los datos que aseguran sus consistencia interna.\\
+
+Por ejemplo, a continuación se muestra el modelo de la tabla \emph{user\_details}:
+\begin{lstlisting}[title=Modelo de la tabla \emph{user\_details}]
+class UserDetails(db.Model):
+    __tablename__ = 'user_details'
+
+    id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, default=now)
+    modified = db.Column(db.DateTime, default=now, onupdate=now)
+
+    name = db.Column(db.String(100))
+    description = db.Column(db.Text)
+    birth_date = db.Column(db.DateTime, default=datetime.strptime('19900101', '%Y%m%d'))
+    gender = db.Column(ChoiceType(Genders), default=Genders.O)
+    cyclist = db.Column(ChoiceType(CyclistTypes), default=CyclistTypes.ACR)
+
+    # TODO: Implement image handler
+    image = db.Column(db.String)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    def __init__(self,
+                 user,
+                 name='',
+                 description='',
+                 birth_date=None,
+                 gender=None,
+                 cyclist=None,
+                 image=''):
+
+        self.user_id = user.id
+
+        self.name = name
+        self.description = description
+
+        if birth_date is not None:
+            self.birth_date = birth_date
+        if gender is not None:
+            self.gender = gender
+        if cyclist is not None:
+            self.cyclist = cyclist
+
+        # TODO: image handler
+        self.image = image
+\end{lstlisting}
+
+Las columnas de la tabla se definen como variables internas de la clase, y en este caso es posible evidenciar 10 columnas distinas: id, created, modified, name, description, birth\_date, gender, cyclist, image y user\_id. Se incluye también un constructor que se encarga de inicializar las columnas, verificando que datos requeridos no queden en blanco. Entonces, para crear una nueva entrada en la tabla basta con crear una nueva instancia de la clase \texttt{UserDetails}, y luego confirmar su creación en la base de datos utilizando \texttt{db.session.add()} y \texttt{db.session.commit()}, métodos incluídos en SQLAlchemy.\\
+
+La tabla \emph{users} se define de manera similar, mientras que por otro lado, \emph{user\_stats} y \emph{samples} tienen consideraciones especiales que se verán a continuación.\\
+
+A continuación, se muestra la implementación del modelo de \emph{samples}.
+
+\begin{lstlisting}[title=Modelo de la tabla \emph{samples}]
+class Sample (db.Model):
+    __tablename__ = 'samples'
+    id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, default=now)
+    modified = db.Column(db.DateTime, default=now, onupdate=now)
+
+    max = db.Column(db.Float, default=0.0)
+    min = db.Column(db.Float, default=0.0)
+    var = db.Column(db.Float, default=0.0)
+    std = db.Column(db.Float, default=0.0)  # standard deviation
+    mean = db.Column(db.Float, default=0.0)
+    current = db.Column(db.Float, default=0.0)
+
+    _sum = db.Column(db.Float, default=0.0)
+    _sumsqr = db.Column(db.Float, default=0.0)  # for calculating E(X^2) -> used for the variance
+    size = db.Column(db.Float, default=0.0)
+
+    def update(self, sample):
+
+        self.size += 1
+        self._sum += sample
+        self._sumsqr += math.pow(sample, 2)
+
+        self.current = sample
+
+        self.max = sample if sample >= self.max or self.max == 0 else self.max
+        self.min = sample if sample <= self.min or self.min == 0 else self.max
+
+        self.mean = (self._sum / self.size)
+        self.var = (self._sumsqr / self.size) - math.pow(self.mean, 2)  # var = E(X2) - (E(X))2
+        self.std = math.sqrt(self.var)
+\end{lstlisting}
+
+Como se comentó anteriormente, \emph{samples} almacena muestras estadísticas: cada entrada en la tabla corresponde a una estadística (ya sea peso, distancia, etc) de algún usuario. Como tales, las entradas no debiesen ser modificadas directamente, sino que se utiliza un método  \texttt{update()} que actualiza la estadística, recalculando por ejemplo el promedio y la varianza cada vez que se agrega una nueva muestra.\\
+\newpage
+Por otro lado, el modelo de la tabla \emph{user\_stats}, se ve como sigue (extracto):
+\begin{lstlisting}[title=Modelo de la tabla \emph{user\_stats} (extracto)]
+class UserStats(db.Model):
+    __tablename__ = 'user_stats'
+    id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, default=now)
+    modified = db.Column(db.DateTime, default=now, onupdate=now)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    speed_id = db.Column(db.Integer, db.ForeignKey('samples.id'), nullable=False)
+    distance_id = db.Column(db.Integer, db.ForeignKey('samples.id'), nullable=False)
+    calories_id = db.Column(db.Integer, db.ForeignKey('samples.id'), nullable=False)
+    weight_id = db.Column(db.Integer, db.ForeignKey('samples.id'), nullable=False)
+
+    def __init__(self):
+        speed = Sample()
+        distance = Sample()
+        calories = Sample()
+        weight = Sample()
+
+        db.session.add(speed)
+        db.session.add(distance)
+        db.session.add(calories)
+        db.session.add(weight)
+        db.session.commit()
+
+        self.speed_id = speed.id
+        self.distance_id = distance.id
+        self.calories_id = calories.id
+        self.weight_id = weight.id
+\end{lstlisting}
+
+Cada una de las columnas (excepto id, created y modified) corresponden a llaves foráneas a entradas en \emph{samples}, las cuales contienen información sobre las muestras estadísticas de éste usuario en específico. A su vez, cuenta con un método especial para actualizar (y mostrar) las muestras de una manera que mantenga la consistencia del sistema.
+\pagebreak
+\begin{lstlisting}[title=Rutina de actualización de muestras estadísticas.]
+    def update_stats(self, speed=None, distance=None, calories=None, weight=None):
+
+        sample_speed = Sample.query.filter(Sample.id == self.speed_id).first()
+        sample_distance = Sample.query.filter(Sample.id == self.distance_id).first()
+        sample_calories = Sample.query.filter(Sample.id == self.calories_id).first()
+        sample_weight = Sample.query.filter(Sample.id == self.weight_id).first()
+
+        change = False
+
+        if speed is not None:
+            sample_speed.update(speed)
+            change = True
+        if distance is not None:
+            sample_distance.update(distance)
+            change = True
+        if calories is not None:
+            sample_calories.update(calories)
+            change = True
+        if weight is not None:
+            sample_weight.update(weight)
+            change = True
+        if change:
+            db.session.commit()
+
+        return sample_speed, sample_distance, sample_calories, sample_weight
+\end{lstlisting}
+
+\paragraph{API\\\\}
+
+Se utilizó la librería Restless, junto con un wrapper escrito previamente por Felipe Lalanne, para la abstracción de la creación de endpoints de la API. Los recursos se modelaron como clases de Python, con métodos específos para las operaciones \emph{CRUD}.\\
+
+Se definieron dos clases para el manejo de las vistas: la clase \texttt{UserResource}, la cual maneja el acceso a los detalles de usuario, y la clase \texttt{UserStatsResource}, cuyo fin es manejar el acceso a las estadísticas de usuario.
+
+\subparagraph{UserResource:\\} Esta clase abstrae los puntos de acceso para el manejo de datos no estadísticos de los usuarios, y su estructura general es:
+\begin{lstlisting}
+@api.resource('/api/v1/users/')
+class UserResource:
+
+    @api.grant(Roles.ADMIN)
+    def list(self):
+        ...
+
+    # /api/v1/users/<pk>/
+    @api.grant(Roles.ADMIN, Roles.USER)
+    def detail(self, pk):
+        ...
+
+    @api.grant(Roles.ADMIN)
+    def create(self):
+        ...
+
+    @api.grant(Roles.ADMIN, Roles.USER)
+    def update(self, pk):
+        ...
+
+    @api.grant(Roles.ADMIN)
+    def delete(self, pk):
+        ...
+\end{lstlisting}
+
+La clase está registrada en el endpoint \texttt{/api/v1/users/}, y contiene métodos para cada una de las operaciones \emph{CRUD}, tanto para la colección completa, como para usuarios específicos. Por ejemplo, el método \texttt{detail()} de la clase es el encargado de retornar detalles sobre usuarios específicos:
+\begin{lstlisting}[title=Método de obtención de detalles de usuario.]
+# /api/v1/users/<pk>/
+@api.grant(Roles.ADMIN, Roles.USER)
+def detail(self, pk):
+    if Grant.check_grant(self.user, Roles.ADMIN):
+        user = User.query.filter(User.username == pk).first()
+        return {
+            'id': user.username,
+            'created': user.created.isoformat(),
+            'modified': user.details.modified.isoformat(),
+            'email': user.email,
+            'name': user.details.name,
+            'description': user.details.description,
+            'birth_date': user.details.birth_date.isoformat(),
+            'gender': user.details.gender,
+            'cyclist': user.details.cyclist,
+            'image': user.details.image
+        }
+
+    if self.user.username == pk:
+        return {
+            'id': self.user.username,
+            'created': self.user.created.isoformat(),
+            'modified': self.user.details.modified.isoformat(),
+            'email': self.user.email,
+            'name': self.user.details.name,
+            'description': self.user.details.description,
+            'birth_date': self.user.details.birth_date.isoformat(),
+            'gender': self.user.details.gender,
+            'cyclist': self.user.details.cyclist,
+            'image': self.user.details.image
+        }
+
+    raise Unauthorized('Only admins and data owners can view user data')
+\end{lstlisting}
+\newpage
+Cabe destacar que toda transferencia de información entre servidor y cliente se hace en formato JSON, de manera de mantener la estructura lógica de la información transferida. En el ejemplo anterior, el servidor al ser consultado por los detalles de un usuario en específico, responde con un objeto JSON que contiene la información deseada (además de información del resultado de la operación):
+\begin{lstlisting}[language=json, title=Ejemplo de respuesta del servidor.]
+{
+    'ok': True,
+    'result': {
+        'id': '067e61623b6f4ae2a1712470b63dff00',
+        'created': '1970-01-01T00:00:01.000001',
+        'modified': '1970-01-01T00:00:01.000010',
+        'email': 'foo@bar.baz',
+        'name': 'Foo Bar',
+        'description': 'Lorem ipsum dolor sit amet.',
+        'birth_date': '1970-01-01T00:00:01.000001',
+        'gender': 'M',
+        'cyclist': 'ACR',
+        'image': ''
+    }
+}
+\end{lstlisting}
+
+Por otro lado, la comunicación de cliente a servidor sigue un formato parecido. Tomando por ejemplo, el método \texttt{create()}, encargado de la creación de nuevos usuarios, expuesto a continuación (extracto). Este método obtiene la información del usuario a crear desde el cliente en un objecto JSON idéntico al objeto retornado en el campo \texttt{`result'} del JSON retornado por \texttt{detail()} (con la adición del campo \texttt{`password'}).
+\begin{lstlisting}[title=Extracto del método de creación de usuarios.]
+def create(self):
+    ...
+
+    user = User(
+        email=self.data.get('email'),
+        password=self.data.get('password')
+    )
+
+    # Always create details
+    gender = self.data.get('gender', None)
+    if gender and gender not in Genders:
+        raise BadRequest(("Gender must be one of (" + ','.join(["'%s'"] * len(Genders)) + ")") % tuple(Genders))
+    cyclist = self.data.get('cyclist', None)
+    if cyclist and cyclist not in CyclistTypes:
+        raise BadRequest(("Gender must be one of (" + ','.join(["'%s'"] * len(Genders)) + ")") % tuple(Genders))
+
+    try:
+        bdate = datetime.strptime(self.data.get('birth_date', '1990-01-01'), '%Y-%m-%d')
+    except ValueError:
+        raise BadRequest(
+            'Birth date must be in ISO-8601 format, only including year, month and day. Example: 1990-01-01')
+
+    user.details = UserDetails(user=user,
+                               name=self.data.get('name', None),
+                               description=self.data.get('description', ''),
+                               birth_date=bdate,
+                               gender=gender,
+                               cyclist=cyclist,
+                               image=self.data.get('image', '')
+                               )
+
+    # Always init stats:
+    user.stats = UserStats()
+    db.session.add(user)
+
+    ...
+
+    db.session.commit()
+
+    return {
+            'id': user.username,
+            'created': user.created.isoformat(),
+            ...
+        }
+\end{lstlisting}
+\begin{lstlisting}[language=json, title=Ejemplo de datos para solicitud de creación de usuario.]
+{
+    'email': 'foo@bar.baz',
+    'password': 'foobarbaz'
+    'name': 'Foo Bar',
+    'description': 'Lorem ipsum dolor sit amet.',
+    'birth_date': '1970-01-01',
+    'gender': 'M',
+    'cyclist': 'ACR',
+}
+\end{lstlisting}
+
+\subparagraph{UserStatsResource:\\}
+
+\newpage
 \subsection{SUR}
 
 Como se ha mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - esto con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en todos los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permitiedo por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.
