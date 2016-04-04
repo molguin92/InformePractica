@@ -695,8 +695,43 @@ def create(self):
     'cyclist': 'ACR',
 }
 \end{lstlisting}
-
+\pagebreak
 \subparagraph{UserStatsResource:\\}
+
+Por su parte, esta clase está asociada al conjunto de \emph{endpoints} \texttt{/api/v1/users/stats/\textless id\textgreater}, y sólo posee métodos para la consulta y actualización de estadísticas de usuarios individuales (no de la colección completa, ya que no tiene sentido). En específico, posee dos métodos -- uno para la consulta de las estadísticas de un usuario dado, y otra para la modificación de éstas. La implementación de éstas es relativamente simple: el método de consulta simplemente busca las estadísticas en la base de datos, las empaca en un diccionario JSON y las retorna. Por otro lado, el método de modificación recibe una solicitud con las muestras a ingresar en un JSON, las desempaca y las agrega a la base de datos.\\
+
+\begin{lstlisting}[title=Extracto del método de consulta de estadísticas de usuario.]
+# /api/v1/users/stats/<pk>/
+@api.grant(Roles.ADMIN, Roles.USER)
+def detail(self, pk):
+    ...
+
+    speed, distance, calories, weight = userstats.get_stats()
+
+    return {
+        'user': userstats.user.username,
+        'weight': {
+            'max': weight.max,
+            'min': weight.min,
+            'current': weight.current
+        },
+        'speed': {
+            'max': speed.max,
+            'min': speed.min,
+            'average': speed.mean
+        },
+        'calories': {
+            'max': calories.max,
+            'min': calories.min,
+            'average': calories.mean
+        },
+        'distance': {
+            'max': distance.max,
+            'min': distance.min,
+            'average': distance.mean
+        }
+    }
+\end{lstlisting}
 
 \newpage
 \subsection{SUR}
