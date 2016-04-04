@@ -276,7 +276,7 @@ Cuando el practicamente comenzó su trabajo en NICLabs, SUR como proyecto todav�
 
 \subsubsection{BeCity}
 
-El practicante diseñó e implementó parte de la nueva API, en específico el módulo de manejo de usuarios, siguiendo las restricciones del modelo REST para servicios web. El trabajo realizado se puede dividir en dos etapas:
+El practicante diseñó e implementó parte de la nueva API, en específico el módulo de manejo de usuarios (con la excepción del sistema de autentificación, el cual fue implementado por Felipe Lalanne), siguiendo las restricciones del modelo REST para servicios web. El trabajo realizado se puede dividir en dos etapas:
 \begin{enumerate}
     \item \emph{Diseño y Documentación} \\ En esta etapa, el practicante estudió la API existente del módulo escogido para entender el funcionamiento interno de éste, y los métodos que presentaba su interfaz. Luego, se diseñó y documentó la nueva versión del módulo, con especial énfasis en la nueva interfaz.
     \item \emph{Implementación y Testeo} \\ Luego de diseñado y documentado el módulo, se procedió a la implementación de las funcionalidades en código. Se utilizó el proceso de desarrollo ``Test Driven Development'', es decir, primero se escribían tests para funcionalidades deseadas, y luego se implementaban.
@@ -305,13 +305,13 @@ El primer paso en el rediseño del módulo de usuarios del backend de BeCity, fu
 Esta etapa se desarrolló al mismo tiempo que el practicante investigó de manera más profunda sobre el modelo REST y aprendió sobre el uso de las herramientas disponibles en Python para el desarrollo de sistemas de ésta índole.
 
 \paragraph{Almacenamiento de la información de los usuarios}
+TODODODODODODOD
 
 \subsubsection{Diseño de nueva implementación}
 
 A partir de análisis anterior, el practicante pudo elaborar un nuevo diseño para el backend, completamente en línea con los requerimientos del modelo REST. Este diseño se detalla a continuación, junto con justificaciones de las deciciones tomadas.
 
-\paragraph{Almacenamiento de la información de los usuarios}
-
+\paragraph{Almacenamiento de la información de los usuarios\\\\}
 Se decidió continuar utilizando PostgreSQL para el almacenamiento de datos, por las ventajas que presenta para el almacenamiento de la información que maneja BeCity. La información manejada por el sistema es inherentemente relacional, puesto que se trata de datos de usuarios y estadísticas que se relacionan mutuamente.\\
 
 En términos del modelo de la base de datos, la información de los usuarios se subdividió en tres tablas:
@@ -321,7 +321,34 @@ En términos del modelo de la base de datos, la información de los usuarios se 
     \item Tabla UserStats: Esta es una tabla especial que agrupa llaves foráneas a otra tabla, Sample. Cada entrada en esta última corresponde a una estadística almacenada (Sample por ejemplo almacena el último valor agregado, el máximo, el promedio, etc), por lo que cada llave foránea almacenada en UserStats corresponde a una estadística en Sample.
 \end{enumerate}
 
-Se determinó ésta subdivisión de la información con el fin de modularizar elementos puntuales - de ésta manera, por ejemplo, es posible modificar cómo se almacenan las estadísticas de cada usuario sin afectar su información de inicio de sesión.
+Se determinó ésta subdivisión de la información con el fin de modularizar elementos individuales - de ésta manera, por ejemplo, es posible modificar cómo se almacenan las estadísticas de cada usuario sin afectar su información de inicio de sesión.
+
+\paragraph{API\\\\}
+
+La interacción entre clientes y servidor obedece al paradigma \emph{CRUD} (Create, Read, Update, Delete - crear, leer, actualizar y eliminar), por lo que la API asociada al módulo debía permitir por lo menos este reducido conjunto de operaciones. Considerando lo anterior, se definieron los siguientes puntos de enlace para la API:
+
+\begin{enumerate}
+    \item \texttt{/api/v1/users/} -- Corresponde al punto de acceso a la colección de usuarios, y admite los siguientes verbos HTTP:
+    \begin{itemize}
+        \item POST: Correspondiente a la operación \emph{Create} del modelo \emph{CRUD}, permite la creación de nuevos usuarios en el sistema (sólo disponible para administradores). Recibe los datos del usuario, lo crea, y luego retorna la ID del recurso creado.
+        \item GET: Corresponde a la operación \emph{Read}, y permite obtener la lista de usuarios del sistema. Sólo disponible para administradores.
+    \end{itemize}
+    \item \texttt{/api/v1/users/\textless id\textgreater} -- Donde \textless id\textgreater corresponde a una ID de usuario sobre el cual operar. Permite:
+    \begin{itemize}
+        \item GET: \emph{Read}, pero a diferencia del método mencionado anteriormente permite el acceso a los detalles de un usuario en específico, y es accesible por administradores y el mismo usuario.
+        \item PUT: \emph{Update}, permite la actualización de los datos de un usuario. Disponible para administradores y el usuario mismo.
+        \item DELETE: \emph{Delete}, para eliminar un usuario por completo. Sólo accesible por administradores.
+    \end{itemize}
+    \item \texttt{/api/v1/users/stats/\textless id\textgreater} -- Permite acceder a las estadísticas de un usuario específico:
+    \begin{itemize}
+        \item GET: Actualiza las estadísticas del usuario.
+        \item PUT: Retorna el detalle de las estadísticas.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Implementación}
+
+
 
 \subsection{SUR}
 
