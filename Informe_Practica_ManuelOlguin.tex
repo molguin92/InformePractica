@@ -266,7 +266,7 @@ SUR es pretende ser un servicio de uso interno de INRIA Chile y NICLabs; una pla
 \subsection{Situación Previa}
 \subsubsection{BeCity}
 
-En agosto del 2015, BeCity como aplicación ya se encontraba en funcionamiento, siendo distribuída a través de la tienda de aplicaciones de Google, la ``Play Store'', y con su backend montado en el servidor de NICLabs. Sin embargo, si bien contaba con una API completa para la comunicación entre clientes y backend, ésta no seguía el estándar REST para servicios web, principalmente en lo que se refiere a la uniformidad de la interfaz y la transparencia de capas, además de no seguir el estándar HTTP (e.g. todas las solicitudes ocupaban el verbo GET independiente de si solicitaban o no un recurso del servidor). Dado estas condiciones, se había decidido reconstruirla desde cero siguiendo rigurosamente el modelo REST, para asegurar su futura escalabilidad y estabilidad.
+En agosto del 2015, BeCity como aplicación ya se encontraba en funcionamiento, siendo distribuída a través de la tienda de aplicaciones de Google, la ``Play Store'', y con su backend montado en el servidor de NICLabs. Sin embargo, si bien contaba con una API completa para la comunicación entre clientes y backend, ésta no seguía el estándar REST para servicios web, principalmente en lo que se refiere a la uniformidad de la interfaz y la transparencia de capas, además de no seguir el estándar HTTP (e.g. todas las solicitudes ocupaban el verbo POST independiente de si creaban o no recursos nuevos en el servidor). Dadas estas condiciones, se había decidido reconstruirla desde cero siguiendo rigurosamente el modelo REST, para asegurar su futura escalabilidad y estabilidad.
 
 \subsubsection{SUR}
 
@@ -299,14 +299,43 @@ El trabajo consistió de dos etapas:
 
 BeCity tiene como fin el facilitar el tránsito del ciclista por la ciudad, a la vez que recopila información y estadísticas útiles proporcionadas por los mismos usuarios. Por lo tanto, el manejo de usuarios de una manera eficiente es fundamental para el funcionamiento del servicio, y por consiguiente éste fue el primer módulo de funcionalidad en ser rediseñado para la nueva versión del backend.
 
-\subsubsection{Análisis de implementación existente}
+\subsubsection{Análisis de implementación anterior}
 
 El primer paso en el rediseño del módulo de usuarios del backend de BeCity, fue el estudio y análisis de la implementación anterior. Esto con el fin de identificar funcionalidades claves que debían mantenerse o mejorarse en la nueva iteración del sistema.\\
-Esta etapa se desarrolló al mismo tiempo que el practicante investigó de manera más profunda sobre el modelo REST y aprendió sobre el uso de las herramientas disponibles en Python para el desarrollo de sistemas de ésta índole.
+Esta etapa se desarrolló al mismo tiempo que el practicante investigó de manera más profunda sobre el modelo REST y aprendió sobre el uso de las herramientas disponibles en Python para el desarrollo de sistemas de ésta índole.\\
 
-\paragraph{Almacenamiento de la información de los usuarios}
-TODODODODODODOD
 
+
+\paragraph{Almacenamiento de la información de los usuarios\\\\}
+
+El almacenamiento de los datos de usuario estaba implementado utilizando una base de datos PostgreSQL.
+En el modelo de la base de datos, la información atingente a los perfiles de usuarios se dividía en dos tablas:
+
+\begin{itemize}
+    \item \emph{users} -- La cual almacenaba las propiedades fundamentales de los usuarios; email, contraseña, ID.
+    \item \emph{profile} -- Donde se almacenaban los detalles adicionales del perfil del usuario, como su nombre real, fecha de nacimiento, y estadísticas varias.
+\end{itemize}
+
+Además existían tres tablas más, utilizadas para la autentificación y el inicio de sesión de los usuarios.\\
+
+En términos de código, la interacción entre el servidor y la base de datos se realizaba a través de las abstracciones proporcionadas por las librerías de Python SQLAlchemy y Flask-SQLAlchemy. Éstas permiten definir las tablas de la base de datos como clases de Python, y la creación de una nueva entrada se reduce simplemente a la creación de una nueva instancia del objeto definido por dicha clase.\\
+Las tablas anteriormente mencionadas estaban entonces implementadas mediante dos clases de Python muy simples:
+\begin{itemize}
+    \item \emph{User}, la cual simplemente contenía variables de instancia y un constructor que inicializaba los valores del email y la contraseña.
+    \item \emph{Profile}, la cual a su vez almacenaba los datos del perfil de usuario, y contenía un método para pasar esta información a un formato JSON.
+\end{itemize}
+\newpage
+\paragraph{API\\\\}
+
+La API anterior de BeCity utilizaba la librería Flask de Python, la cual abstrae la implementación de los \emph{endpoints} como ``funciones de vista'' -- funciones de python asociadas a un URL específico. Bajo este paradigma, la antigua API de BeCity consistía en una colección de funciones sin ninguna coherencia arquitectural. No existía un formato de respuesta común, ni una manera de agrupar semánticamente las funciones asociadas a un mismo recurso. \\
+
+Por otro lado, la implementación violaba el estándar HTTP y el modelo REST utilizando el verbo POST para todas las solicitudes, ya fuesen solicitudes de creación de recursos, o de eliminación de éstos. Ésto tenía la consecuencia adicional de que, en vez de asignar URL's por recursos, y disponer de múltiples operaciones distintas por URL dependiendo del verbo HTTP utilizado en las solicitudes, en la antigua API existían URL's asociados a \emph{operaciones}.
+
+Para ilustrar los problemas anteriores: existía por ejemplo el \emph{endpoint} \texttt{/api/user/delete}, el cual sólo aceptaba el verbo HTTP POST, el cual recibía una ID de usuario en un mensaje JSON y lo eliminaba de la base de datos. Ésto, en una API conforme al modelo REST y sin violaciones del protocolo HTTP, se implementaría mediante un endpoint \emph{/api/users/\textless id\textgreater} (\emph{id} es variable), el cual entre otros, admite el verbo HTTP DELETE y elimina el usuario identificado por \emph{\textless id\textgreater}.\\
+
+Finalmente, existía también una separación innecesaria de los accesos a los usuarios propiamente tal y sus perfiles, con endpoints distintos para cada uno (\texttt{/api/user} y \texttt{/api/profile} respectivamente).
+
+\newpage
 \subsubsection{Diseño de nueva implementación}
 
 A partir de análisis anterior, el practicante pudo elaborar un nuevo diseño para el backend, completamente en línea con los requerimientos del modelo REST. Este diseño se detalla a continuación, junto con justificaciones de las deciciones tomadas.
@@ -333,7 +362,8 @@ La interacción entre clientes y servidor obedece al paradigma \emph{CRUD} (Crea
         \item POST: Correspondiente a la operación \emph{Create} del modelo \emph{CRUD}, permite la creación de nuevos usuarios en el sistema (sólo disponible para administradores). Recibe los datos del usuario, lo crea, y luego retorna la ID del recurso creado.
         \item GET: Corresponde a la operación \emph{Read}, y permite obtener la lista de usuarios del sistema. Sólo disponible para administradores.
     \end{itemize}
-    \item \texttt{/api/v1/users/\textless id\textgreater} -- Donde \textless id\textgreater corresponde a una ID de usuario sobre el cual operar. Permite:
+    \newpage
+    \item \texttt{/api/v1/users/\textless id\textgreater} -- Donde \textless id\textgreater \@ corresponde a una ID de usuario sobre el cual operar. Permite:
     \begin{itemize}
         \item GET: \emph{Read}, pero a diferencia del método mencionado anteriormente permite el acceso a los detalles de un usuario en específico, y es accesible por administradores y el usuario mismo.
         \item PUT: \emph{Update}, permite la actualización de los datos de un usuario. Disponible para administradores y el usuario mismo.
@@ -418,8 +448,6 @@ class UserDetails(db.Model):
 Las columnas de la tabla se definen como variables internas de la clase, y en este caso es posible evidenciar 10 columnas distinas: id, created, modified, name, description, birth\_date, gender, cyclist, image y user\_id. Se incluye también un constructor que se encarga de inicializar las columnas, verificando que datos requeridos no queden en blanco. Entonces, para crear una nueva entrada en la tabla basta con crear una nueva instancia de la clase \texttt{UserDetails}, y luego confirmar su creación en la base de datos utilizando \texttt{db.session.add()} y \texttt{db.session.commit()}, métodos incluídos en SQLAlchemy.\\
 
 La tabla \emph{users} se define de manera similar, mientras que por otro lado, \emph{user\_stats} y \emph{samples} tienen consideraciones especiales que se verán a continuación.\\
-
-A continuación, se muestra la implementación del modelo de \emph{samples}.
 
 \begin{lstlisting}[title=Modelo de la tabla \emph{samples}]
 class Sample (db.Model):
