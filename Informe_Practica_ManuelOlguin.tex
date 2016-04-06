@@ -29,7 +29,7 @@
 \usepackage{hyperref}
 \usepackage{amssymb}
 \usepackage{url}
-%\usepackage{pdfpages}
+\usepackage{pdfpages}
 \usepackage{fancyhdr}
 \usepackage{hyperref}
 \usepackage{subfig}
@@ -107,7 +107,7 @@
 \fancyhf{}
 %-------------------- CABECERA ---------------------
 \fancyhead[L]{ \includegraphics[scale=0.3]{img/fcfm_dcc.pdf} }
-%\fancyhead[R]{ \includegraphics[scale=0.4]{img/fcfm.png} }
+\fancyhead[R]{ \includegraphics[scale=1]{img/niclabs.png} }
 %------------------ TÍTULO -----------------------
 \vspace*{6cm}
 \begin{center}
@@ -119,12 +119,15 @@
 \vfill
 \begin{flushright}
 \begin{tabular}{ll}
-Empresa: & NIC Chile Research Labs\\
 Alumno: & Manuel Olguín\\
 Carrera: & Ingeniería Civil en Computación\\
 RUT:& 18.274.982 -- 6\\
 E-Mail: & molguin@dcc.uchile.cl\\
 Tel: & +56 9 7463 6997\\
+\\
+Empresa: & NIC Chile Research Labs\\
+Supervisor: & Felipe Lalanne\\
+\\
 & \today\\
 & Santiago, Chile.
 \end{tabular}
@@ -153,13 +156,14 @@ Tel: & +56 9 7463 6997\\
 
 \newpage
 \section{Certificado de la Empresa}
+\includepdf{evaluacion/evaluacion.pdf}
 \newpage
 \section{Observaciones}
 \newpage
 % =============== INDICE ===============
 
 \tableofcontents
-\listoffigures
+%\listoffigures
 
 % =============== SECCION ===============
 \newpage
@@ -167,7 +171,7 @@ Tel: & +56 9 7463 6997\\
 
 El trabajo se realizó entre Agosto y Octubre del 2015 en NIC Chile Research Labs, el laboratorio de investigación y desarrollo en protocolos de internet de la Facultad de Ciencias Físicas y Matemáticas de la Universidad de Chile. \@ Consistió en
 \begin{enumerate}
-    \item rediseñar e actualizar parte de la API del backend de BeCity, una aplicación Android desarrollada en el laboratorio, para que se adhiriera al modelo REST.
+    \item rediseñar y actualizar parte de la API del backend de BeCity, una aplicación Android desarrollada en el laboratorio, para que se adhiriera al modelo REST.
     \item diseñar e implementar un microservicio de manejo de imágenes para el proyecto SUR.
 \end{enumerate}
 
@@ -200,7 +204,7 @@ En términos generales, ambos proyectos se desarrollaron en el lenguaje de progr
 
 \subsubsection{REST}
 
-El modelo REST (por sus siglas en inglés, ``Representational State Transfer'') es una serie de restricciones arquitecturales que, aplicadas a un servicio web, inducen una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
+El modelo REST\cite{rest} (por sus siglas en inglés, ``Representational State Transfer'') es una serie de restricciones arquitecturales que, aplicadas a un servicio web, inducen una serie de propiedades deseables (e.g. escalabilidad, estabilidad, rendimiento, etc). Al estar relacionado sólamente con la estructura arquitectural del software, no especifica detalles de implementación, y es independiente del lenguage de programación escogido.\\
 
 A continuación, se expondrán brevemente las restricciones impuestas por el modelo REST:
 \begin{enumerate}
@@ -218,7 +222,7 @@ A continuación, se expondrán brevemente las restricciones impuestas por el mod
 
 \subsubsection{API}
 
-Una API (Application Programming Interface), en el contexto de servicios web, es una interfaz de interacción entre los componentes de un modelo servidor-cliente. Específicamente en el caso de una API RESTful, consiste en un conjunto de puntos de enlace (o, cómo se les referirá en el presente informe, \emph{``vistas''}) públicos en el servidor, a través de los cuales un cliente puede comunicarse e interactuar con el servicio central, utilizando verbos estándar de HTTP (\texttt{GET}, \texttt{PUT}, \texttt{POST} y \texttt{DELETE}).
+Una API\cite{api} (Application Programming Interface), en el contexto de servicios web, es una interfaz de interacción entre los componentes de un modelo servidor-cliente. Específicamente en el caso de una API RESTful, consiste en un conjunto de puntos de enlace (o, cómo se les referirá en el presente informe, \emph{``vistas''}) públicos en el servidor, a través de los cuales un cliente puede comunicarse e interactuar con el servicio central, utilizando verbos estándar de HTTP\cite{http} (\texttt{GET}, \texttt{PUT}, \texttt{POST} y \texttt{DELETE}).
 
 % explicar rest + http + api?
 
@@ -234,7 +238,7 @@ En el contexto del trabajo realizado, Python, principalmente en su versión 2.7 
 
 \subsubsection{JSON}
 
-JSON (JavaScript Object Notation), es un estándar abierto de codificación de datos para la comunicación entre servidor y cliente, en la cual los datos se codifican en pares atributo-valor en ``cleartext'' (es decir, texto legible por humanos).
+JSON\cite{json} (JavaScript Object Notation), es un estándar abierto de codificación de datos para la comunicación entre servidor y cliente, en la cual los datos se codifican en pares atributo-valor en ``cleartext'' (es decir, texto legible por humanos).
 Por ejemplo, el siguiente extracto ilustra una posible codificación de la FCFM en JSON:
 \begin{lstlisting}[language=JSON]
 {
@@ -252,7 +256,7 @@ Por ejemplo, el siguiente extracto ilustra una posible codificación de la FCFM 
 
 \subsubsection{Redis}
 
-Redis puede describirse como un ``almacén de estructuras de datos en disco'', y se utiliza comúnmente como base de datos y transmisor de mensajes; además, en conjunto con la librería \emph{RQWorker}[cite here] de Python, se puede utilizar como una cola de ejecución de tareas. Éste fue el uso que se le dió en el servidor de imágenes, para ejecutar ciertas tareas de tiempo de ejecución más largo de manera diferida.
+Redis\cite{redis} puede describirse como un ``almacén de estructuras de datos en disco'', y se utiliza comúnmente como base de datos y transmisor de mensajes; además, en conjunto con la librería \emph{Python RQ}\cite{rqworker} de Python, se puede utilizar como una cola de ejecución de tareas. Éste fue el uso que se le dió en el servidor de imágenes, para ejecutar ciertas tareas de tiempo de ejecución más largo de manera diferida.
 
 %\subsubsection{Docker}
 \subsubsection{BeCity}
@@ -270,7 +274,8 @@ En agosto del 2015, BeCity como aplicación ya se encontraba en funcionamiento, 
 
 \subsubsection{SUR}
 
-Cuando el practicamente comenzó su trabajo en NICLabs, SUR como proyecto todavía no existía, por lo que todo el trabajo se desarrolló desde cero.
+Cuando el practicamente comenzó su trabajo en NICLabs, SUR como proyecto sólo existía como idea. Prácticamente todo el trabajo desarrollado por el practicante para este proyecto fue desde cero.
+
 \pagebreak
 \subsection{Descripción General del Trabajo}
 
@@ -288,8 +293,8 @@ El trabajo realizado en SUR consistió en el desarrollo de un servicio de manejo
 
 El trabajo consistió de dos etapas:
 \begin{enumerate}
-    \item \emph{Diseño del Servicio}\\ Para comenzar, se determinaron los requerimientos del servicio; las funcionalidades deseadas y la manera de interactuar con éste.
-    \item \emph{Implementación}\\ Ya establecidos los requerimientos, se implementó el sistema deseado.
+    \item \emph{Diseño del Servicio}\\ Para comenzar, se determinaron los requerimientos del servicio; las funcionalidades deseadas y la manera de interactuar con éste. Además, se establecieron los detalles de la integración del servicio con el resto de SUR.
+    \item \emph{Implementación y Testing}\\ Ya establecidos los requerimientos, se implementó el sistema deseado, empleando una estrategia de desarrollo iterativo basado en tests.
 \end{enumerate}
 
 \newpage
@@ -350,7 +355,7 @@ En términos del modelo de la base de datos, la información de los usuarios se 
     \item Tabla \emph{user\_stats}: Esta es una tabla especial que agrupa llaves foráneas a otra tabla, \emph{samples}. Cada entrada en esta última corresponde a una estadística almacenada (\emph{samples} por ejemplo almacena el último valor agregado, el máximo, el promedio, etc), por lo que cada llave foránea almacenada en \emph{user\_stats} corresponde a una entrada en \emph{samples}.
 \end{enumerate}
 
-Se determinó ésta subdivisión de la información con el fin de modularizar elementos individuales - de ésta manera, por ejemplo, es posible modificar cómo se almacenan las estadísticas de cada usuario sin afectar su información de inicio de sesión. Además, la abstracción de las estadísticas en muestras almacenadas en una tabla aparte, hacen que en el futuro agregar nuevas métricas al sistema sea simple y directo - basta con agregar una nueva llave foránea a \emph{samples} en \emph{user\_stats}.
+Se determinó ésta subdivisión de la información con el fin de modularizar elementos individuales - de esta manera, por ejemplo, es posible modificar cómo se almacenan las estadísticas de cada usuario sin afectar su información de inicio de sesión. Además, la abstracción de las estadísticas en muestras almacenadas en una tabla aparte, hacen que en el futuro agregar nuevas métricas al sistema sea simple y directo - basta con agregar una nueva llave foránea a \emph{samples} en \emph{user\_stats}.
 
 \paragraph{API\\\\}
 
@@ -392,7 +397,7 @@ Además, para evitar ciertos problemas de seguridad que existen al retornar list
 Como se mencionó anteriormente, la implementación se llevó a cabo utilizando Python 2.7, en parte por su amplio repertorio de librerías. Entre las librerías utilizadas, podemos destacar:
 \begin{itemize}
     \item Flask\cite{flask}, la cual proporciona un framework básico para el desarrollo de aplicaciones web en Python. Por ejemplo, simplifica la ejecución de una aplicación Python como un servicio web asíncrono, y provee abstracciones para la implementación de endpoints (URL's) para interactuar con la aplicación.
-    \item SQLAlchemy\cite{sqlalchemy} (junto con su extensión Flask-SQLAlchemy), para la interacción con la base de datos PostgreSQL. Provee abstracciones para la fácil definición de tablas y sus relaciones a través de clases en Python.
+    \item SQLAlchemy\cite{sqlalchemy} (junto con su extensión Flask-SQLAlchemy\cite{flasksqlalchemy}), para la interacción con la base de datos PostgreSQL. Provee abstracciones para la fácil definición de tablas y sus relaciones a través de clases en Python.
     \item Restless\cite{restless}, librería que proporciona una capa de abstracción para la creación de endpoints de servicios web como clases de Python.
 \end{itemize}
 
@@ -736,19 +741,30 @@ def detail(self, pk):
 \newpage
 \subsection{SUR}
 
-Como se ha mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - esto con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en todos los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permitiedo por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.
-\\
-Bajo esta lógica fue que al practicante se le solicitó la implementación del servicio central de imágenes, el cual permitiese compartir de manera transparente y eficiente recursos de imágenes (por ejemplo, avatares de usuario) entre los proyectos.
+Como se ha mencionado anteriormente, el proyecto SUR pretende ser una plataforma central para todos los proyectos de INRIA Chile y NICLabs - con el fin de centralizar varios servicios que actualmente se encuentran ``duplicados'' en los proyectos (por ejemplo, manejo de usuarios y de imágenes). Un servicio central como SUR permitiría que cierta información se pudiese compartir de manera transparente entre los proyectos y servicios, permitiedo por ejemplo que usuarios usen sus mismas credenciales de inicio de sesión, evitando la redundancia de tener que crear cuentas en cada uno de los servicios.\\
 
+La plataforma en sí está diseñada como un conjunto de microservicios individuales, cada uno con una labor específica y acotada, que se presentan al cliente como una API única y coherente. Los servicios deben entonces ser relativamente independientes, pero a la vez poder comunicarse y coordinarse entre sí.
+
+% % ················ IMAGEN ·················
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.5]{img/diagrama_SUR.png}
+\caption{Diagrama arquitectural de SUR}\label{sur}
+\end{figure}
+% %··········································
+
+
+Bajo esta lógica fue que al practicante se le solicitó la implementación del servicio central de imágenes, el cual permitiese compartir de manera transparente y eficiente recursos de imágenes (por ejemplo, avatares de usuario) entre los proyectos. Este servicio debía además interactuar con el servicio de autentificación de usuarios (desarrollado en paralelo por Felipe Lalanne), para restringir el acceso a las imágenes almacenadas.
+\pagebreak
 \subsubsection{Especificaciones}
 
 El servicio en cuestión debía seguir una serie de especificaciones generales que aseguraban su eficiencia, escalabilidad y su compatibilidad con los demás servicios de la plataforma.
 
 \begin{enumerate}
-    \item \emph{Independencia:} \@ La implementación del servicio de imágenes debía ser independiente y agnóstica de la implementación del resto de los servicios. Es decir, si bien podía exister interdependencia entre el servicio de imágenes, y (por ejemplo) el servicio de autentificación, ésta no podía depender de la implementación de cada uno. Esto para asegurar que en el futuro, los servicios pudiesen actualizarse o cambiarse completamente sin perturbar el resto de los servicios en la plataforma.
-    \item \emph{Adherencia al modelo REST} \@ El servicio debía basarse en el paradigma cliente-servidor, y seguir las especificaciones del modelo REST; comunicación mediante verbos HTTP, no almacenar estados, etc.
-    \item \emph{Simplicidad} \@ El código debía ser simple y conciso, y no agregar demasiada complejidad al sistema.
-    \item \emph{Instántaniedad} \@ Finalmente, la respuesta del servicio a solicitudes por parte de clientes debiese ser expedita, y no causar esperas prolongadas.
+    \item \emph{Independencia} -- \@ La implementación del servicio de imágenes debía ser independiente y agnóstica de la implementación del resto de los servicios. Es decir, si bien podía exister interdependencia entre el servicio de imágenes, y (por ejemplo) el servicio de autentificación, ésta no podía depender de la implementación de cada uno. Esto para asegurar que en el futuro, los servicios pudiesen actualizarse o cambiarse completamente sin perturbar el resto de los servicios en la plataforma.
+    \item \emph{Adherencia al modelo REST} -- \@ El servicio debía basarse en el paradigma cliente-servidor, y seguir las especificaciones del modelo REST; comunicación mediante verbos HTTP, no almacenar estados, etc.
+    \item \emph{Simplicidad} -- \@ El código debía ser simple y conciso, y no agregar demasiada complejidad al sistema.
+    \item \emph{Instántaniedad} -- \@ Finalmente, la respuesta del servicio a solicitudes por parte de clientes debiese ser expedita, y no causar esperas prolongadas.
 \end{enumerate}
 
 Además, se establecieron una serie de requerimientos funcionales de los servicios que debía proveer el sistema:
@@ -760,13 +776,13 @@ Además, se establecieron una serie de requerimientos funcionales de los servici
 \newpage
 \subsubsection{Diseño Arquitectural}
 
-En concordancia con las especificaciones y requerimientos anteriores, se llegó al diseño arquitectural detallado en esta sección.
+En concordancia con las especificaciones y requerimientos anteriores, se llegó al diseño arquitectural detallado en esta sección.\\
 
-El lenguaje escogido para la implementación fue nuevamente Python 2.7, principalmente por su amplio repertorio de librerías para desarrollo web, además de su simplicidad y elegancia sintáctica. Adicionalmente, es el lenguaje en el que están escritos todos los demás servicios de SUR, asegurando así una coherencia arquitectural interna de la plataforma.
+El lenguaje escogido para la implementación fue nuevamente Python 2.7, principalmente por su amplio repertorio de librerías para desarrollo web, además de su simplicidad y elegancia sintáctica. Adicionalmente, es el lenguaje en el que están escritos todos los demás servicios de SUR, asegurando así una coherencia arquitectural interna de la plataforma.\\
 
 Entre las librerías del lenguaje que fueron utilizadas, podemos destacar:
 \begin{itemize}
-    \item Flask\cite{flask}, la cual proporciona un framework básico para el desarrollo de aplicaciones web en Python. Por ejemplo, simplifica la ejecución de una aplicación Python como un servicio web asíncrono, y provee abstracciones para la implementación de endpoints (URL's) para interactuar con la aplicación.
+    \item Flask\cite{flask}, para el desarrollo de la base de la aplicación web.
     \item Pillow\cite{pillow}, librería de manejo de imágenes. Provee métodos de alteración de imágenes (transformaciones de tamaño, formato, etc).
 \end{itemize}
 
@@ -793,7 +809,7 @@ Al recibir la solicitud, el servidor primero ejecuta pruebas para verificar la e
 Verificada la validez de la solicitud, el servidor pasa a almacenar y procesar la imagen (si la imagen ya existe en el sistema de archivos, el servidor simplemente retorna un mensaje HTTP ``201 Created''). En esta etapa también se verifica que el archivo cargado sea efectivamente una imagen, y el servidor retorna nuevamente un ``400 Bad Request'' de no ser así.\\
 
 El procesamiento de las imágenes se hace de manera diferida - al terminar las verificaciones mencionadas previamente, el servidor guarda la imagen en disco y agrega un procedimiento a la cola de procesamiento del servidor Redis (además de retornar ``201 Created'' junto con el hash de la imagen al cliente). La rutina diferida de procesamiento ejecutada por el servidor Redis es la siguiente:
-
+\pagebreak
 \begin{lstlisting}
 def process_image(filename):
     """
@@ -818,6 +834,7 @@ def process_image(filename):
         shutil.rmtree(UPLOAD_FOLDER + filename)
 \end{lstlisting}
 
+
 Para evitar manejar los nombres de las imágenes (por ejemplo, por consideraciones de seguridad), éstas se identifican mediante su hash MD5: al recibir una imagen nueva, el servidor crea un directorio en la carpeta de imágenes cuyo nombre es el hash de la imagen, y luego almacena la imagen recibida bajo el nombre ``original.png'' dentro de dicho directorio. Luego, la rutina diferida ``process\_image()'' se encarga de crear múltiples resoluciones de la misma imagen para su rápido acceso en el futuro, las cuales se almacenan bajo el mismo directorio mencionado anteriormente.\\
 
 Finalmente, una imagen con hash MD5 \texttt{CB5DED429F491D8337FC58006468CF35} cargada correctamente al servidor quedaría almacenada de la siguiente manera:
@@ -832,7 +849,7 @@ UPLOAD_FOLDER/
 \end{verbatim}
 
 Donde los archivos \texttt{48.png}, \texttt{128.png}, etc., corresponden a resoluciones específicas precalculadas para su rápido acceso en el futuro.
-
+\pagebreak
 \paragraph{2. Descarga de imágenes}
 
 La descarga de imágenes fue la segunda funcionalidad en implementarse, y funciona como se detalla a continuación.
@@ -845,12 +862,13 @@ Para descargar una imagen, el cliente debe conocer su ID (la cual corresponde al
 \end{enumerate}
 
 Por ejemplo, un cliente que desee obtener la imagen \texttt{CB5DED429F491D8337FC58006468CF35} transformada a \texttt{1280x720} (sin mantener la relación de aspecto), debería efectuar la siguiente solicitud:
-\begin{verbatim}
-GET /v1/images/CB5DED429F491D8337FC58006468CF35?width=1280&height=720
-\end{verbatim}
+\begin{center}
+\texttt{GET /v1/images/CB5DED429F491D8337FC58006468CF35?width=1280}\&\texttt{height=720}
+\end{center}
+
 
 Internamente, las solicitudes son manejadas por el servidor de la siguiente manera:
-Primero, se verifica la existencia de la imagen, y de no existir se retorna un código de error ``404 Not Found'' al cliente.
+primero, se verifica la existencia de la imagen, y de no existir se retorna un código de error ``404 Not Found'' al cliente.
 Verificada ya la existencia de la imagen solicitada, se procede a servir la imagen de acuerdo a los parámetros solicitados por el cliente (si la solicitud no incluye parámetros, se retorna directamente la imagen original). De especial interés son aquellas solicitudes con el parámetro ``thumbnail'', ya que éstas son solicitudes para resoluciones populares y estándar de la imagen. Tienen el efecto de que, de no existir el tamaño solicitado, este es creado y almacenado por el servidor, de tal manera que futuras solicitudes para dicho tamaño sean más expeditas.\\
 
 \begin{lstlisting}[title=Extracto de código encargado de manejar solicitudes de tamaños precalculados.]
@@ -887,21 +905,142 @@ elif thumb != 0:  # if it doesn't, create and then send it
 
 Finalmente, se procesan las solicitudes con los parámetros de escala, ancho y alto, ya que estos requieren procesamiento en el lugar de la imagen, y demoran más.
 
+\paragraph{3. Eliminación de imágenes}
+
+La eliminación de imágenes se implementó mediante una rutina simple que recibe la ID de la imagen a eliminar y elimina completamente el directorio relacionada con dicha imagen.
+
+\begin{lstlisting}
+@auth.check_auth
+def delete_image(image_id):
+    """
+    Deletes an image from the server.
+    Requires auth, and only admins should be able to call this method.
+    Note that this deletes the original image and ALL associated thumbnails.
+    :param image_id: The ID of the image to be deleted.
+    """
+    if os.path.exists(UPLOAD_FOLDER + image_id):
+        shutil.rmtree(UPLOAD_FOLDER + image_id)
+        app.logger.info('Deleting image: ' + image_id)
+        return create_body(result='Image deleted.'), 201
+    else:
+        raise NotFound404(error='Image with ID={0} not found.'.format(image_id))
+\end{lstlisting}
+
+\paragraph{4. Integración con servicio de Auth}
+
+El servicio de autentificación de usuarios fue desarrollado en paralelo por Felipe Lalanne, y la integración entre ambos servicios fue el último paso en el desarrollo del servidor de imágenes. \\
+
+La integración entre ambos servicios funciona de la siguiente manera:
+\begin{enumerate}
+    \item El servicio de Auth expone internamente un \emph{endpoint} que recibe un token de autentificación a validar en los parámetros del URL. Este \emph{endpoint} luego retorna un código HTTP 200 si el token es válido, y 404 si no.
+    \item Por su parte, el servicio de imágenes implementa un \emph{wrapper} en torno a sus métodos que requieren autentificación, el cual extrae el token de las solicitudes entrantes y lo envía al servidor de autentificación para su validación. En caso de ser válido, se ejecuta el método solicitado, y en caso contrario retorna un código de error al cliente indicando que su autentificación no es válida.
+\end{enumerate}
+\pagebreak
+En términos de implementación, el \emph{wrapper} encargado de la extracción y validación de los tokens es el siguiente:
+\begin{lstlisting}
+def check_auth(self, view):
+    """
+    Wraps a view function, and checks the authorization of each request on said view.
+    :param view: The view to be protected by the auth service.
+    """
+
+    @wraps(view)
+    def wrap_view(*args, **kwargs):
+
+        if self.app.config.get('TESTING') or self.app.config.get('DEBUG'):
+            # always return true if testing
+            return view(*args, **kwargs)
+
+        token = get_token_from_request()
+        if token is not None:
+            authenticated = self.check_token(token)
+            if authenticated:
+                return view(*args, **kwargs)
+            else:
+                raise Unauthorized401()
+        else:
+            raise Unauthorized401(error='missing_token', error_description='No authorization token provided.')
+
+    return wrap_view
+\end{lstlisting}
+Este método simplemente verifica que el token sea válido, y de serlo, procede a la ejecución de la vista solicitada. Sin embargo, en caso de error de autentificación (ya sea token vencido o inexistente), envía en vez un código de error HTTP 401 Unauthorized al cliente.\\
+
+Finalmente, el método encargado de la validación del token es relativamente simple -- básicamente, envía una solicitud al servidor de autentificación, incluyendo el token a validar como parámetro del URL, y retorna \emph{True} o \emph{False} si el token es válido o no, respectivamente.
+
+\begin{lstlisting}
+def check_token(self, token):
+    """
+    Sends a request to the auth service to verify the validity of a token.
+    Returns a boolean indicating the validity (or not) of the token.
+    :param token: String - the token to be validated.
+    :return: Boolean - True if the token is valid, False otherwise.
+    """
+    if token is None:
+        return False
+
+    rv = requests.get(self.auth_url, params={'token': token})
+    if rv.status_code == 404:
+        return False
+
+    return True
+\end{lstlisting}
+
 \newpage
 \section{Conclusiones}
+
+El trabajo descrito por el presente informe de práctica fue evaluado por el supervisor, Felipe Lalanne, y fue considerado como suficientemente satisfactorio como para incorporar al practicante al personal permanente de NICLabs.\\
+
+Desgraciadamente, por razones internas, la continuación del proyecto de BeCity está actualmente en discusión dentro de la directiva del laboratorio. El trabajo efectuado por el practicante no ha sido entonces incluído en el código de producción, aunque conforma una sólida base para del desarrollo de una futura versión del proyecto.\\
+
+Por otro lado, el proyecto SUR ha sido adoptado en su totalidad por INRIA Chile, fundación sin fines de lucro enfocada en la investigación y desarrollo en áreas de las ciencias de la computación, dónde se continúa su desarrollo. La implementación del servidor de imágenes fue evaluada como satisfactoria, y si bien presenta algunos \emph{bugs}, se considera lo suficientemente estable como para justificar su uso dentro del proyecto. \\
+
+Dentro de la experiencia y el aprendizaje técnico obtenidos por el practicante durante el periodo, destacan:
+\begin{itemize}
+    \item La adquisición de conocimiento sobre tecnologías y estándares web, como el modelo REST y el desarrollo de backends y servicios en Python.
+    \item La aplicación de las enseñanzas obtenidas en la carrera sobre bases de datos relacionales, y el aprendizaje práctico de cómo interactuar con éstas mediante lenguajes de alto nivel.
+\end{itemize}
+
+Finalmente, destaca también la experiencia adquirida en la aplicación práctica de la \emph{ingeniería de software}, y el trabajo en una empresa. Por ejemplo, se adquirío valioso conocimiento sobre las distintas etapas del desarrollo de software, desde el diseño inicial y la identificación de requerimientos, pasando por el desarrollo mismo y el testeo del software. Por otro lado, se aprendió a utilizar de manera correcta y eficiente herramientas de desarrollo colaborativo como lo son los sistemas de control de versión (en este caso, \emph{git}), y la correcta documentación de un software -- y en particular, la documentación de una API que en algún momento podría llegar a ser pública.
 \newpage
+%\section{Apéndices}
+%\subsection{BeCity}
+%\subsubsection{Modelo de Base de Datos}
+%\lstinputlisting{code/becity_models.py}
+%\newpage
+%\subsubsection{Implementación de Vistas}
+%\lstinputlisting{code/becity_views.py}
+%\newpage
+%\subsection{SUR}
+%\subsubsection{Implementación de Vistas}
+%\lstinputlisting{code/sur_views.py}
+%\newpage
+%\subsubsection{Integración con Servicio de Auth}
+%\lstinputlisting{code/sur_auth.py}
+%\newpage
 \begin{thebibliography}{5}
     \bibitem{niclabs} \emph{NIC Chile Research Labs} - \url{http://niclabs.cl}
 
     \bibitem{lalanne} \emph{Felipe Lalanne} - \url{https://github.com/pipex}
 
-    \bibitem{postgres} \emph{PostgreSQL - ``The world's most advanced open source database.''}\\ \url{http://www.postgresql.org/}
-
     \bibitem{python} \emph{The Python Programming Language} - \url{https://www.python.org/}
 
     \bibitem{pycharm} \emph{JetBrains Pycharm} - \url{https://www.jetbrains.com/pycharm/}
 
+    \bibitem{rest} \emph{RESTful Web Services} - \url{http://www.ibm.com/developerworks/library/ws-restful/}
+
     \bibitem{uri} \emph{URI - Uniform Resource Identifier}: cadena de caracteres utilizada para identificar recursos específicos, siguiendo un esquema definido.\\ \url{https://en.wikipedia.org/wiki/Uniform_Resource_Identifier}
+
+    \bibitem{api} \emph{Application Programming Interface} - \url{https://en.wikipedia.org/wiki/Web_API}
+
+    \bibitem{http} \emph{HyperText Transfer Protocol Verbs} - \url{https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html}
+
+    \bibitem{postgres} \emph{PostgreSQL - ``The world's most advanced open source database.''}\\ \url{http://www.postgresql.org/}
+
+    \bibitem{json} \emph{Javascript Object Notation} - \url{http://www.json.org/}
+
+    \bibitem{redis} \emph{Redis} - \url{http://redis.io/}
+
+    \bibitem{rqworker} \emph{Python RQ:} Library for Python background workers. - \url{http://python-rq.org/}
 
 	\bibitem{flask} \emph{Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions.}\\ \url{http://flask.pocoo.org/}
 
@@ -920,9 +1059,7 @@ Finalmente, se procesan las solicitudes con los parámetros de escala, ancho y a
 % \centering
 % \fbox{\includegraphics[scale=0.6]{img/flujo.png}}
 % \caption{Flujo de caja anual}\label{flujo}
-% \end{figure}\\begin{enumerate}
-    \item a
-\end{enumerate}
+% \end{figure}
 % %··········································
 
 % % ················ IMAGEN DOBLE ·················
